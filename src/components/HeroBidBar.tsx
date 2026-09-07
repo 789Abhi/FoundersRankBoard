@@ -28,27 +28,27 @@ export const HeroBidBar: React.FC<HeroBidBarProps> = ({
   const initialTopAmount = topBidUSD > 0 ? topBidUSD + 500 : 5000;
   const [bidAmount, setBidAmount] = useState<number>(initialTopAmount);
   const [productUrl, setProductUrl] = useState("");
-  const [category, setCategory] = useState<CategoryType>("Agents");
+  const [category, setCategory] = useState<CategoryType>("AI Agents & Infrastructure");
   const [error, setError] = useState<string | null>(null);
 
   const handleMinus = () => {
-    setBidAmount((prev) => Math.max(500, prev - 1000));
+    setBidAmount((prev) => Math.max(500, prev - 500));
   };
 
   const handlePlus = () => {
-    setBidAmount((prev) => prev + 50);
+    setBidAmount((prev) => prev + 500);
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!productUrl.trim()) {
-      setError("Please enter your website URL or @handle");
+      setError("Please enter your website URL");
       return;
     }
     setError(null);
     onClaimRank({
       url: productUrl.trim(),
-      category: category !== "All" ? category : "Agents",
+      category: category !== "All" ? category : "AI Agents & Infrastructure",
       amountUSD: bidAmount,
     });
   };

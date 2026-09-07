@@ -1,44 +1,68 @@
-import { INITIAL_WEBSITES } from "../data/initialData";
 import { LeaderboardStats, PaymentSubmission, WebsiteListing } from "../types";
 import { cleanDomain, ensureProtocol } from "./utils";
+import { createClient } from "../utils/supabase/client";
 
-const STORAGE_KEY = "rankmeup_clean_v6";
+const supabase = createClient();
 
-function cleanListingFavicon(listing: WebsiteListing): WebsiteListing {
-  let cleaned = { ...listing };
-  if (!cleaned.lastClickedAt) {
-    cleaned.lastClickedAt = cleaned.createdAt || new Date().toISOString();
-  }
-  return cleaned;
+// Helper to map DB snake_case to frontend camelCase
+function mapListing(dbItem: any): WebsiteListing {
+  return {
+    id: dbItem.id,
+    domain: dbItem.domain,
+    name: dbItem.name || dbItem.domain,
+    url: dbItem.url,
+    tagline: dbItem.tagline,
+    category: dbItem.category,
+    totalPaidUSD: Number(dbItem.total_paid_usd),
+    clicks: dbItem.clicks,
+    createdAt: dbItem.created_at,
+    lastClickedAt: dbItem.last_clicked_at,
+    favicon: dbItem.favicon,
+    bgColor: dbItem.bg_color,
+    timeAgo: "recently", // we can calculate this live in components
+  };
 }
 
-export function getStoredListings(): WebsiteListing[] {
-  if (typeof window === "undefined") {
-    return sortListings(INITIAL_WEBSITES);
-  }
-
+export async function getStoredListings(): Promise<WebsiteListing[]> {
   try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(INITIAL_WEBSITES));
-      return sortListings(INITIAL_WEBSITES);
-    }
-    const parsed = JSON.parse(raw);
-    if (Array.isArray(parsed)) {
-      return sortListings(parsed.map(cleanListingFavicon));
-    }
-    return sortListings(INITIAL_WEBSITES);
-  } catch {
-    return sortListings(INITIAL_WEBSITES);
-  }
-}
+    const { data, error } = await supabase
+      .from('listings')
+      .select('*')
+      .order('total_paid_usd', { ascending: false });
 
-export function saveListings(listings: WebsiteListing[]): void {
-  if (typeof window === "undefined") return;
-  try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(listings.map(cleanListingFavicon)));
+    if (error) {
+      console.error("Supabase fetch error:", error);
+      return [];
+    }
+    
+    return data ? data.map(mapListing) : [];
   } catch (err) {
-    console.error("Failed to save to localStorage", err);
+    console.error("Failed to fetch from Supabase", err);
+    return [];
+  }
+}
+
+export async function saveListingToDB(listing: WebsiteListing): Promise<void> {
+  const dbItem = {
+    id: listing.id.startsWith("site-") ? undefined : listing.id, // let uuid generate if new
+    domain: listing.domain,
+    name: listing.name,
+    url: listing.url,
+    tagline: listing.tagline,
+    category: listing.category,
+    total_paid_usd: listing.totalPaidUSD,
+    clicks: listing.clicks || 0,
+    favicon: listing.favicon,
+    bg_color: listing.bgColor,
+  };
+
+  // Upsert by domain
+  const { error } = await supabase
+    .from('listings')
+    .upsert(dbItem, { onConflict: 'domain' });
+
+  if (error) {
+    console.error("Failed to save to Supabase", error);
   }
 }
 
@@ -89,9 +113,7 @@ export function registerActiveSession(): () => void {
       clearInterval(interval);
       try {
         localStorage.removeItem(key);
-      } catch {
-        // ignore
-      }
+      } catch {}
     };
 
     window.addEventListener("beforeunload", cleanup);
@@ -140,98 +162,13 @@ export function calculateStats(listings: WebsiteListing[]): LeaderboardStats {
   };
 }
 
-export function processSubmission(submission: PaymentSubmission): {
-  updatedListings: WebsiteListing[];
-  newListing: WebsiteListing;
-  newRank: number;
-} {
-  const currentListings = getStoredListings();
-  const cleanedDomain = cleanDomain(submission.domain || submission.url);
-  const fullUrl = ensureProtocol(submission.url || submission.domain);
-  const now = new Date().toISOString();
-
-  const existingIndex = currentListings.findIndex(
-    (item) =>
-      cleanDomain(item.domain) === cleanedDomain ||
-      (submission.targetListingId && item.id === submission.targetListingId)
-  );
-
-  let updatedListings: WebsiteListing[];
-  let affectedListing: WebsiteListing;
-
-  const bgPalette = ["#064e3b", "#0f172a", "#14532d", "#0c4a6e", "#3b0764", "#18181b"];
-  const randomBg = bgPalette[Math.floor(Math.random() * bgPalette.length)];
-
-  if (existingIndex !== -1) {
-    const existing = currentListings[existingIndex];
-    affectedListing = {
-      ...existing,
-      name: submission.name || existing.name,
-      url: fullUrl || existing.url,
-      tagline: submission.tagline || existing.tagline,
-      category: submission.category || existing.category,
-      totalPaidUSD: existing.totalPaidUSD + submission.amountUSD,
-      favicon: submission.favicon || existing.favicon,
-      timeAgo: "just now",
-    };
-
-    updatedListings = currentListings.map((item, idx) =>
-      idx === existingIndex ? affectedListing : item
-    );
-  } else {
-    // Generate clean brand title or use real site title
-    const brandName = submission.name || `${cleanedDomain.split(".")[0].charAt(0).toUpperCase() + cleanedDomain.split(".")[0].slice(1)} · ${submission.tagline?.slice(0, 30) || "Official Website"}`;
-
-    affectedListing = {
-      id: `site-${Date.now()}`,
-      domain: cleanedDomain,
-      name: brandName,
-      url: fullUrl,
-      tagline: submission.tagline || "Discover this innovative tool on BidToRankUp.",
-      category: submission.category,
-      totalPaidUSD: submission.amountUSD,
-      clicks: 1,
-      timeAgo: "just now",
-      bgColor: randomBg,
-      createdAt: now,
-      lastClickedAt: now,
-      favicon: submission.favicon,
-    };
-
-    updatedListings = [...currentListings, affectedListing];
+export async function trackOutboundClick(listingId: string): Promise<void> {
+  // Read current clicks first
+  const { data: item } = await supabase.from('listings').select('clicks').eq('id', listingId).single();
+  if (item) {
+    await supabase.from('listings').update({ 
+      clicks: (item.clicks || 0) + 1,
+      last_clicked_at: new Date().toISOString()
+    }).eq('id', listingId);
   }
-
-  const sorted = sortListings(updatedListings);
-  saveListings(sorted);
-  const newRank = sorted.findIndex((item) => item.id === affectedListing.id) + 1;
-
-  return {
-    updatedListings: sorted,
-    newListing: affectedListing,
-    newRank,
-  };
-}
-
-export function trackOutboundClick(listingId: string): WebsiteListing[] {
-  const now = new Date().toISOString();
-  const current = getStoredListings();
-  const updated = current.map((item) =>
-    item.id === listingId
-      ? {
-          ...item,
-          clicks: (item.clicks || 0) + 1,
-          lastClickedAt: now,
-          timeAgo: "just now",
-        }
-      : item
-  );
-  saveListings(updated);
-  return updated;
-}
-
-export function resetToDefaults(): WebsiteListing[] {
-  if (typeof window !== "undefined") {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(INITIAL_WEBSITES));
-  }
-  return sortListings(INITIAL_WEBSITES);
 }

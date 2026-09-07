@@ -14,7 +14,7 @@ export const BigBottomRevenue: React.FC<BigBottomRevenueProps> = ({
   stats,
   onOpenSubmit,
 }) => {
-  const outbidOneAmount = stats.topBidUSD > 0 ? stats.topBidUSD + 5 : 100;
+  const outbidOneAmount = stats.topBidUSD > 0 ? stats.topBidUSD + 5 : 5;
 
   return (
     <section id="revenue-section" className="relative mt-12 border-t border-zinc-200/80 dark:border-[#16241a] bg-gradient-to-b from-zinc-100/80 via-emerald-50/30 to-zinc-50 dark:from-[#080d0a] dark:via-[#09120c] dark:to-[#060a08] py-14 sm:py-18 overflow-hidden transition-colors">

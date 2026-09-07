@@ -3,21 +3,17 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { CategoryType, LeaderboardStats, PaymentSubmission, WebsiteListing } from "../types";
+import { useRouter, useSearchParams } from "next/navigation";
 import { 
   getStoredListings, 
-  saveListings,
   calculateStats, 
-  processSubmission, 
   trackOutboundClick, 
-  resetToDefaults,
   registerActiveSession
 } from "../lib/storage";
 import { Navbar } from "../components/Navbar";
 import { CleanHero } from "../components/CleanHero";
 import { Leaderboard } from "../components/Leaderboard";
 import { BigBottomRevenue } from "../components/BigBottomRevenue";
-import { SubmitModal } from "../components/SubmitModal";
-import { PaymentModal } from "../components/PaymentModal";
 import { formatUSD } from "../lib/utils";
 import { Trophy, RefreshCw } from "lucide-react";
 
@@ -81,7 +77,7 @@ export default function Home() {
       );
 
       setListings(updated);
-      saveListings(updated);
+      // We don't save to DB here anymore because we don't want metadata syncing to override DB clicks/amounts without caution.
     } catch {
       // ignore
     }
@@ -89,19 +85,28 @@ export default function Home() {
 
   useEffect(() => {
     const cleanupSession = registerActiveSession();
-    const data = getStoredListings();
-    setListings(data);
-    setStats(calculateStats(data));
-    setIsLoaded(true);
+    let isMounted = true;
 
-    const timer = setInterval(() => {
-      setStats(calculateStats(getStoredListings()));
-    }, 4000);
+    async function loadData() {
+      const data = await getStoredListings();
+      if (!isMounted) return;
+      setListings(data);
+      setStats(calculateStats(data));
+      setIsLoaded(true);
+      // Auto-fetch real titles
+      syncLiveWebsiteMeta(data);
+    }
+    
+    loadData();
 
-    // Automatically sync live titles and descriptions from real websites
-    syncLiveWebsiteMeta(data);
+    const timer = setInterval(async () => {
+      const data = await getStoredListings();
+      if (!isMounted) return;
+      setStats(calculateStats(data));
+    }, 10000); // Polling every 10s from Supabase to not overwhelm DB
 
     return () => {
+      isMounted = false;
       cleanupSession();
       clearInterval(timer);
     };
@@ -114,7 +119,9 @@ export default function Home() {
     }, 4500);
   };
 
-  // Quick submit from Hero with auto-fetched real title & description
+  const router = useRouter();
+
+  // Quick submit from Hero
   const handleQuickSubmit = (data: {
     domain: string;
     name?: string;
@@ -123,84 +130,28 @@ export default function Home() {
     amountUSD: number;
     favicon?: string;
   }) => {
-    setTargetListing(null);
-    setPendingSubmission({
-      domain: data.domain,
-      name: data.name,
-      tagline: data.tagline,
-      url: data.domain,
-      category: data.category,
-      amountUSD: Math.max(5, data.amountUSD),
-      favicon: data.favicon,
-    });
-    setIsPaymentOpen(true);
+    router.push(`/submit?domain=${encodeURIComponent(data.domain)}&category=${encodeURIComponent(data.category)}&amount=${data.amountUSD}`);
   };
 
   // General submit modal
   const handleOpenSubmit = (amount?: number, category?: CategoryType) => {
-    setTargetListing(null);
-    setInitialAmount(amount || 500);
-    setInitialCategory(category);
-    setIsSubmitOpen(true);
+    let url = '/submit?';
+    if (amount) url += `amount=${amount}&`;
+    if (category) url += `category=${encodeURIComponent(category)}`;
+    router.push(url);
   };
 
   // Outbid from card with dynamic suggested amount
   const handleBoost = (listing: WebsiteListing, suggestedAddAmount: number) => {
-    setTargetListing(listing);
-    setInitialAmount(Math.max(5, suggestedAddAmount));
-    setInitialCategory(listing.category);
-    setIsSubmitOpen(true);
+    router.push(`/submit?targetId=${listing.id}&domain=${encodeURIComponent(listing.domain)}&category=${encodeURIComponent(listing.category)}&amount=${Math.max(5, suggestedAddAmount)}`);
   };
 
-  const handleProceedToPayment = (data: {
-    domain: string;
-    name?: string;
-    url: string;
-    tagline?: string;
-    category: CategoryType;
-    amountUSD: number;
-    targetListingId?: string;
-    favicon?: string;
-  }) => {
-    setIsSubmitOpen(false);
-    setPendingSubmission(data);
-    setIsPaymentOpen(true);
-  };
-
-  const handlePaymentSuccess = (payment: PaymentSubmission) => {
-    const result = processSubmission(payment);
-    setListings(result.updatedListings);
-    setStats(calculateStats(result.updatedListings));
-    setIsPaymentOpen(false);
-    setPendingSubmission(null);
-
-    const rankTitle =
-      result.newRank === 1
-        ? `👑 ${result.newListing.name || result.newListing.domain} is now #1 Overall!`
-        : `🚀 ${result.newListing.name || result.newListing.domain} climbed to Rank #${result.newRank}!`;
-
-    triggerToast(
-      rankTitle,
-      `Paid ${formatUSD(payment.amountUSD)}. Platform revenue is now ${formatUSD(
-        calculateStats(result.updatedListings).totalRevenueUSD
-      )}.`
-    );
-  };
-
-  const handleTrackClick = (listingId: string) => {
-    const updated = trackOutboundClick(listingId);
+  const handleTrackClick = async (listingId: string) => {
+    await trackOutboundClick(listingId);
+    // Optimistic UI update for click
+    const updated = listings.map(l => l.id === listingId ? { ...l, clicks: (l.clicks || 0) + 1 } : l);
     setListings(updated);
     setStats(calculateStats(updated));
-  };
-
-  const handleResetData = () => {
-    if (confirm("Reset leaderboard back to original seed data?")) {
-      const reset = resetToDefaults();
-      setListings(reset);
-      setStats(calculateStats(reset));
-      triggerToast("Reset Complete", "Listings restored.");
-      syncLiveWebsiteMeta(reset);
-    }
   };
 
   if (!isLoaded) {
@@ -254,7 +205,7 @@ export default function Home() {
             <span className="h-2 w-2 rounded-full bg-emerald-500"></span>
             <span className="font-bold text-zinc-900 dark:text-zinc-200">BidToRankUp</span>
             <span>·</span>
-            <span>Zero-Login Pay-to-Rank Domain Board</span>
+            <span>&copy; {new Date().getFullYear()}</span>
           </div>
 
           <div className="flex items-center gap-4 text-zinc-600 dark:text-zinc-400">
@@ -267,34 +218,9 @@ export default function Home() {
             <Link href="/privacy" className="hover:text-emerald-600 dark:hover:text-emerald-400 transition">
               Privacy Policy
             </Link>
-            <button
-              onClick={handleResetData}
-              className="text-zinc-400 hover:text-zinc-600 dark:text-zinc-500 dark:hover:text-zinc-300 transition flex items-center gap-1"
-            >
-              <RefreshCw className="h-3 w-3" />
-              <span>Reset</span>
-            </button>
           </div>
         </div>
       </footer>
-
-      {/* Modals */}
-      <SubmitModal
-        isOpen={isSubmitOpen}
-        onClose={() => setIsSubmitOpen(false)}
-        listings={listings}
-        initialAmount={initialAmount}
-        initialCategory={initialCategory}
-        targetListing={targetListing}
-        onProceedToPayment={handleProceedToPayment}
-      />
-
-      <PaymentModal
-        isOpen={isPaymentOpen}
-        onClose={() => setIsPaymentOpen(false)}
-        submissionData={pendingSubmission}
-        onPaymentSuccess={handlePaymentSuccess}
-      />
 
       {/* Real-time notification toast */}
       {toastMessage && (

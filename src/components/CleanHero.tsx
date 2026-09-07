@@ -37,7 +37,7 @@ export const CleanHero: React.FC<CleanHeroProps> = ({
   stats,
 }) => {
   const [domainInput, setDomainInput] = useState("");
-  const [category, setCategory] = useState<CategoryType>("Marketing");
+  const [category, setCategory] = useState<CategoryType>("Marketing & Advertising");
   const [amount, setAmount] = useState<number>(5);
   const [error, setError] = useState<string | null>(null);
   const [faviconSrc, setFaviconSrc] = useState<string>("");
@@ -170,7 +170,7 @@ export const CleanHero: React.FC<CleanHeroProps> = ({
         domain: cleaned,
         name: activeTitle || `${brandCapital} · ${cleaned}`,
         tagline: activeDesc || `Discover ${cleaned} live on BidToRankUp.`,
-        category: category !== "All" ? category : "Marketing",
+        category: category !== "All" ? category : "Marketing & Advertising",
         amountUSD: Math.max(5, amount),
         favicon: activeFavicon || undefined,
       });
@@ -223,18 +223,18 @@ export const CleanHero: React.FC<CleanHeroProps> = ({
             </div>
 
             {/* Custom Category Dropdown */}
-            <div className="relative w-full sm:w-40 flex-shrink-0">
+            <div className="relative w-full sm:w-56 flex-shrink-0">
               <button
                 type="button"
                 onClick={() => setIsCategoryOpen(!isCategoryOpen)}
                 className="w-full flex items-center justify-between rounded-xl border border-zinc-200 dark:border-[#223526] bg-zinc-50 dark:bg-[#070b08] px-3 py-2 text-xs font-medium text-zinc-800 dark:text-zinc-200 hover:border-emerald-500/50"
               >
-                <span className="truncate">{category}</span>
-                <ChevronDown className={`h-3.5 w-3.5 text-zinc-400 dark:text-zinc-500 transition-transform ${isCategoryOpen ? "rotate-180" : ""}`} />
+                <span className="truncate text-left flex-1 mr-2">{category}</span>
+                <ChevronDown className={`h-3.5 w-3.5 flex-shrink-0 text-zinc-400 dark:text-zinc-500 transition-transform ${isCategoryOpen ? "rotate-180" : ""}`} />
               </button>
 
               {isCategoryOpen && (
-                <div className="absolute top-full left-0 mt-1 w-full rounded-xl border border-zinc-200 dark:border-[#223526] bg-white dark:bg-[#0a110d] py-1 shadow-2xl z-30 max-h-52 overflow-y-auto">
+                <div className="absolute top-full left-0 mt-1 min-w-full w-max rounded-xl border border-zinc-200 dark:border-[#223526] bg-white dark:bg-[#0a110d] py-1 shadow-2xl z-30 max-h-52 overflow-y-auto">
                   {CATEGORIES.filter((c) => c.name !== "All").map((c) => (
                     <div
                       key={c.name}
@@ -242,7 +242,7 @@ export const CleanHero: React.FC<CleanHeroProps> = ({
                         setCategory(c.name);
                         setIsCategoryOpen(false);
                       }}
-                      className={`px-3 py-1.5 text-xs cursor-pointer ${
+                      className={`px-3 py-1.5 text-xs cursor-pointer whitespace-nowrap ${
                         category === c.name
                           ? "bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 font-bold"
                           : "text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-[#121c15]"
