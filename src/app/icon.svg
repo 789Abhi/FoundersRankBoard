@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <defs>
+    <linearGradient id="iconEmerald" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#10B981" />
+      <stop offset="100%" stop-color="#047857" />
+    </linearGradient>
+  </defs>
+
+  <!-- Deep dark base squircle -->
+  <rect width="64" height="64" rx="18" fill="#060907"/>
+  <rect x="1" y="1" width="62" height="62" rx="17" stroke="#10B981" stroke-opacity="0.35" stroke-width="2"/>
+
+  <!-- Clean aerodynamic rank up chevrons -->
+  <path d="M14 38L32 20L50 38" stroke="#10B981" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M20 48L32 36L44 48" stroke="#34D399" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" stroke-opacity="0.75"/>
+  
+  <!-- Summit #1 golden star beacon -->
+  <circle cx="32" cy="11" r="4.5" fill="#F59E0B"/>
+</svg>

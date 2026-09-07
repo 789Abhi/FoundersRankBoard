@@ -1,0 +1,80 @@
+import type { Metadata } from "next";
+import { Geist, Geist_Mono } from "next/font/google";
+import "./globals.css";
+import { ThemeProvider } from "../components/ThemeProvider";
+
+const geistSans = Geist({
+  variable: "--font-geist-sans",
+  subsets: ["latin"],
+});
+
+const geistMono = Geist_Mono({
+  variable: "--font-geist-mono",
+  subsets: ["latin"],
+});
+
+export const metadata: Metadata = {
+  metadataBase: new URL("https://bidtorankup.com"),
+  title: {
+    default: "BidToRankUp - The Pay-to-Rank Domain Leaderboard",
+    template: "%s | BidToRankUp"
+  },
+  description: "Climb the ultimate domain leaderboard. Bid with your website to rank #1 and get instant high-quality traffic, exposure, and backlinks for ambitious startups.",
+  keywords: [
+    "bid to rank up", "domain leaderboard", "startup directory", "pay to rank", 
+    "dofollow backlinks", "indie hackers", "SaaS marketing", "website ranking",
+    "launch directory", "founder tools"
+  ],
+  authors: [{ name: "BidToRankUp" }],
+  creator: "BidToRankUp",
+  publisher: "BidToRankUp",
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: "https://bidtorankup.com",
+    title: "BidToRankUp - Rank #1 on the Global Leaderboard",
+    description: "The leaderboard where the highest bid ranks #1. Outbid competitors, dominate your category, and drive massive traffic to your startup.",
+    siteName: "BidToRankUp",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "BidToRankUp - The Global Domain Leaderboard",
+    description: "Climb the leaderboard and drive traffic to your startup. Highest bid ranks #1.",
+    creator: "@BidToRankUp",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
+  icons: {
+    icon: "/icon.svg",
+    apple: "/icon.svg",
+  },
+};
+
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  return (
+    <html
+      lang="en"
+      className={`${geistSans.variable} ${geistMono.variable} dark`}
+      suppressHydrationWarning
+    >
+      <body className="min-h-screen bg-[#f8faf9] text-zinc-900 dark:bg-[#060907] dark:text-zinc-100 antialiased selection:bg-emerald-500 selection:text-zinc-950 transition-colors duration-200">
+        <ThemeProvider>
+          {children}
+        </ThemeProvider>
+      </body>
+    </html>
+  );
+}
