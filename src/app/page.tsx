@@ -5,7 +5,8 @@ import Link from "next/link";
 import { CategoryType, LeaderboardStats, PaymentSubmission, WebsiteListing } from "../types";
 import { useRouter, useSearchParams } from "next/navigation";
 import { 
-  getStoredListings, 
+  getStoredListings,
+  getListingsFromCache,
   calculateStats, 
   trackOutboundClick, 
   registerActiveSession
@@ -90,22 +91,36 @@ export default function Home() {
     let isMounted = true;
 
     async function loadData() {
-      const data = await getStoredListings();
+      // 1. Show cached data INSTANTLY (zero wait) so user sees content immediately
+      const cached = getListingsFromCache();
+      if (cached.length > 0 && isMounted) {
+        setListings(cached);
+        setStats(calculateStats(cached));
+        setIsLoaded(true);
+      }
+
+      // 2. Fetch fresh data from Supabase in the background
+      const fresh = await getStoredListings();
       if (!isMounted) return;
-      setListings(data);
-      setStats(calculateStats(data));
+      if (fresh.length > 0) {
+        setListings(fresh);
+        setStats(calculateStats(fresh));
+      }
       setIsLoaded(true);
-      // Auto-fetch real titles
-      syncLiveWebsiteMeta(data);
+      syncLiveWebsiteMeta(fresh.length > 0 ? fresh : cached);
     }
     
     loadData();
 
+    // Refresh from Supabase every 30s to pick up new payments from other users
     const timer = setInterval(async () => {
       const data = await getStoredListings();
       if (!isMounted) return;
-      setStats(calculateStats(data));
-    }, 10000); // Polling every 10s from Supabase to not overwhelm DB
+      if (data.length > 0) {
+        setListings(data);
+        setStats(calculateStats(data));
+      }
+    }, 30000);
 
     return () => {
       isMounted = false;

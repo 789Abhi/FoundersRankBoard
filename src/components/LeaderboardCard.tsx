@@ -94,7 +94,7 @@ function getCategoryIcon(category: string) {
   }
 }
 
-export const LeaderboardCard: React.FC<LeaderboardCardProps> = ({
+const LeaderboardCardInner: React.FC<LeaderboardCardProps> = ({
   listing,
   rank,
   categoryRank,
@@ -255,7 +255,7 @@ export const LeaderboardCard: React.FC<LeaderboardCardProps> = ({
               e.stopPropagation();
               onBoost(listing, outbidAmountSuggested);
             }}
-            className="inline-flex items-center gap-1.5 rounded-xl border border-[#f06e53]/30 bg-[#f06e53]/10 hover:bg-[#f06e53] hover:text-white dark:hover:text-black text-[#e05638] dark:text-[#f06e53] px-3 py-1.5 text-xs font-bold transition active:scale-95 whitespace-nowrap shadow-sm"
+            className="cursor-pointer inline-flex items-center gap-1.5 rounded-xl border border-[#f06e53]/30 bg-[#f06e53]/10 hover:bg-[#f06e53] hover:text-white dark:hover:text-black text-[#e05638] dark:text-[#f06e53] px-3 py-1.5 text-xs font-bold transition active:scale-95 whitespace-nowrap shadow-sm"
           >
             <Zap className="h-3.5 w-3.5 fill-current" />
             <span>
@@ -267,3 +267,5 @@ export const LeaderboardCard: React.FC<LeaderboardCardProps> = ({
     </div>
   );
 };
+
+export const LeaderboardCard = React.memo(LeaderboardCardInner);

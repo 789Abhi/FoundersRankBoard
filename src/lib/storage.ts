@@ -23,6 +23,38 @@ function mapListing(dbItem: any): WebsiteListing {
   };
 }
 
+const CACHE_KEY = "bidtorankup_listings_cache";
+const CACHE_TTL_MS = 30_000; // 30 seconds
+
+// In-memory cache for the current session (fastest access)
+let memoryCache: { data: WebsiteListing[]; ts: number } | null = null;
+
+function readSessionCache(): WebsiteListing[] | null {
+  if (typeof window === "undefined") return null;
+  if (memoryCache && Date.now() - memoryCache.ts < CACHE_TTL_MS) {
+    return memoryCache.data;
+  }
+  try {
+    const raw = sessionStorage.getItem(CACHE_KEY);
+    if (!raw) return null;
+    const { data, ts } = JSON.parse(raw);
+    if (Date.now() - ts < CACHE_TTL_MS) {
+      memoryCache = { data, ts };
+      return data;
+    }
+  } catch {}
+  return null;
+}
+
+function writeSessionCache(data: WebsiteListing[]) {
+  if (typeof window === "undefined") return;
+  const entry = { data, ts: Date.now() };
+  memoryCache = entry;
+  try {
+    sessionStorage.setItem(CACHE_KEY, JSON.stringify(entry));
+  } catch {}
+}
+
 export async function getStoredListings(): Promise<WebsiteListing[]> {
   try {
     const { data, error } = await supabase
@@ -32,14 +64,22 @@ export async function getStoredListings(): Promise<WebsiteListing[]> {
 
     if (error) {
       console.error("Supabase fetch error:", error);
-      return [];
+      // Return cached data on error so UI doesn't break
+      return readSessionCache() ?? [];
     }
     
-    return data ? data.map(mapListing) : [];
+    const mapped = data ? data.map(mapListing) : [];
+    writeSessionCache(mapped);
+    return mapped;
   } catch (err) {
     console.error("Failed to fetch from Supabase", err);
-    return [];
+    return readSessionCache() ?? [];
   }
+}
+
+// Returns cached data INSTANTLY (sync), then triggers a background refresh
+export function getListingsFromCache(): WebsiteListing[] {
+  return readSessionCache() ?? [];
 }
 
 export async function saveListingToDB(listing: WebsiteListing): Promise<void> {
