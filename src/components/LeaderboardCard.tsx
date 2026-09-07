@@ -225,19 +225,6 @@ const LeaderboardCardInner: React.FC<LeaderboardCardProps> = ({
                 <span>{listing.clicks.toLocaleString("en-IN")} clicks</span>
               </span>
 
-              <span>·</span>
-
-              {/* See details / outbid trigger */}
-              <button
-                type="button"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onBoost(listing, outbidAmountSuggested);
-                }}
-                className="font-semibold text-emerald-600 dark:text-emerald-400 hover:underline"
-              >
-                see details
-              </button>
             </div>
           </div>
         </div>

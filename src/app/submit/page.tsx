@@ -211,13 +211,19 @@ function SubmitContent() {
               </div>
               <input
                 type="text"
-                autoFocus
+                autoFocus={!urlDomain}
                 placeholder="startup.com"
                 value={domain}
-                onChange={(e) => setDomain(e.target.value)}
-                className="w-full rounded-xl border border-zinc-200 dark:border-[#1b281f] bg-zinc-50 dark:bg-[#0c120e] pl-11 pr-4 py-3.5 text-sm text-zinc-900 dark:text-white focus:border-emerald-500 focus:outline-none transition-colors"
+                onChange={(e) => !urlDomain && setDomain(e.target.value)}
+                readOnly={!!urlDomain}
+                className={`w-full rounded-xl border pl-11 pr-4 py-3.5 text-sm text-zinc-900 dark:text-white focus:outline-none transition-colors
+                  ${urlDomain
+                    ? "border-zinc-200 dark:border-[#1b281f] bg-zinc-100 dark:bg-[#0a0f0c] cursor-not-allowed opacity-80 select-none"
+                    : "border-zinc-200 dark:border-[#1b281f] bg-zinc-50 dark:bg-[#0c120e] focus:border-emerald-500 cursor-text"
+                  }`}
                 required
               />
+              
             </div>
           </div>
 
@@ -226,17 +232,24 @@ function SubmitContent() {
             <label className="block text-[11px] font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400 mb-1.5 ml-1">
               Category *
             </label>
-            <select
-              value={category}
-              onChange={(e) => setCategory(e.target.value as CategoryType)}
-              className="w-full rounded-xl border border-zinc-200 dark:border-[#1b281f] bg-zinc-50 dark:bg-[#0c120e] px-4 py-3.5 text-sm text-zinc-900 dark:text-white focus:border-emerald-500 focus:outline-none transition-colors appearance-none cursor-pointer"
-            >
-              {CATEGORIES.filter((c) => c.name !== "All").map((cat) => (
-                <option key={cat.name} value={cat.name}>
-                  {cat.name}
-                </option>
-              ))}
-            </select>
+            <div className="relative">
+              <select
+                value={category}
+                onChange={(e) => !urlDomain && setCategory(e.target.value as CategoryType)}
+                disabled={!!urlDomain}
+                className={`w-full rounded-xl border px-4 py-3.5 text-sm text-zinc-900 dark:text-white focus:outline-none transition-colors appearance-none
+                  ${urlDomain
+                    ? "border-zinc-200 dark:border-[#1b281f] bg-zinc-100 dark:bg-[#0a0f0c] cursor-not-allowed opacity-80"
+                    : "border-zinc-200 dark:border-[#1b281f] bg-zinc-50 dark:bg-[#0c120e] focus:border-emerald-500 cursor-pointer"
+                  }`}
+              >
+                {CATEGORIES.filter((c) => c.name !== "All").map((cat) => (
+                  <option key={cat.name} value={cat.name}>
+                    {cat.name}
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
 
           {/* Amount Input */}
