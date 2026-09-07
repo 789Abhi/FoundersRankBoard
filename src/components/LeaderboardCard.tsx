@@ -4,6 +4,20 @@ import React, { useState } from "react";
 import { WebsiteListing } from "../types";
 import { formatUSD, formatTimeAgo } from "../lib/utils";
 import { DomainFavicon } from "./DomainFavicon";
+
+// Decode HTML entities like &#038; -> &, &amp; -> &, etc.
+function decodeHtml(str: string): string {
+  if (!str) return str;
+  return str
+    .replace(/&#0*38;/g, "&")
+    .replace(/&amp;/g, "&")
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&quot;/g, '"')
+    .replace(/&#039;/g, "'")
+    .replace(/&apos;/g, "'")
+    .replace(/&#(\d+);/g, (_, code) => String.fromCharCode(Number(code)));
+}
 import { 
   ExternalLink, 
   MousePointerClick, 
@@ -159,7 +173,7 @@ export const LeaderboardCard: React.FC<LeaderboardCardProps> = ({
 
             {/* Description Body */}
             <p className="mt-1 text-xs text-zinc-600 dark:text-zinc-400 leading-relaxed line-clamp-2">
-              {listing.tagline}
+              {decodeHtml(listing.tagline)}
             </p>
 
             {/* Meta Line: [Icon] Category · timeAgo · domain · clicks · see details */}

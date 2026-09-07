@@ -176,14 +176,20 @@ export async function GET(request: Request) {
 
 function cleanEntities(str: string): string {
   return str
+    .replace(/&#0*38;/g, "&")   // &#038; &#38; -> &
     .replace(/&amp;/g, "&")
+    .replace(/&#0*39;/g, "'")
+    .replace(/&apos;/g, "'")
     .replace(/&#39;/g, "'")
     .replace(/&quot;/g, '"')
+    .replace(/&#0*34;/g, '"')
     .replace(/&lt;/g, "<")
     .replace(/&gt;/g, ">")
     .replace(/&mdash;/g, "—")
     .replace(/&ndash;/g, "–")
     .replace(/&bull;/g, "·")
+    .replace(/&nbsp;/g, " ")
+    .replace(/&#(\d+);/g, (_, code) => String.fromCharCode(Number(code)))
     .replace(/\s+/g, " ")
     .trim();
 }
