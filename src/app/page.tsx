@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { CategoryType, LeaderboardStats, PaymentSubmission, WebsiteListing } from "../types";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -14,10 +14,12 @@ import { Navbar } from "../components/Navbar";
 import { CleanHero } from "../components/CleanHero";
 import { Leaderboard } from "../components/Leaderboard";
 import { BigBottomRevenue } from "../components/BigBottomRevenue";
+import { SplashScreen } from "../components/SplashScreen";
 import { formatUSD } from "../lib/utils";
 import { Trophy, RefreshCw } from "lucide-react";
 
 export default function Home() {
+  const [showSplash, setShowSplash] = useState(true);
   const [listings, setListings] = useState<WebsiteListing[]>([]);
   const [stats, setStats] = useState<LeaderboardStats>({
     totalRevenueUSD: 0,
@@ -154,19 +156,14 @@ export default function Home() {
     setStats(calculateStats(updated));
   };
 
-  if (!isLoaded) {
-    return (
-      <div className="min-h-screen bg-[#f8faf9] dark:bg-[#060907] flex items-center justify-center text-emerald-600 dark:text-emerald-400">
-        <div className="flex items-center gap-2 text-xs font-semibold">
-          <span className="h-2 w-2 rounded-full bg-emerald-500 animate-ping"></span>
-          Loading BidToRankUp...
-        </div>
-      </div>
-    );
-  }
-
   return (
-    <main className="min-h-screen bg-[#f8faf9] text-zinc-800 dark:bg-[#060907] dark:text-zinc-200 bg-mesh-pattern relative selection:bg-emerald-500 selection:text-black transition-colors duration-200">
+    <>
+      {/* Beautiful splash screen — shown on first visit, fades out automatically */}
+      {showSplash && (
+        <SplashScreen onComplete={() => setShowSplash(false)} />
+      )}
+
+      <main className="min-h-screen bg-[#f8faf9] text-zinc-800 dark:bg-[#060907] dark:text-zinc-200 bg-mesh-pattern relative selection:bg-emerald-500 selection:text-black transition-colors duration-200">
       {/* Sticky Header */}
       <Navbar onOpenSubmit={() => handleOpenSubmit()} stats={stats} />
 
@@ -239,5 +236,6 @@ export default function Home() {
         </div>
       )}
     </main>
+    </>
   );
 }

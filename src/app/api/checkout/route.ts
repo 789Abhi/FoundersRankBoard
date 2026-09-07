@@ -11,6 +11,10 @@ export async function POST(req: Request) {
     const body = await req.json();
     const { domain, name, tagline, category, amountUSD, currencyPref, favicon } = body;
 
+    // Detect the base URL automatically from the incoming request
+    // This works on both localhost and production (Vercel) without needing an env var
+    const origin = req.headers.get("origin") || req.headers.get("referer")?.split("/").slice(0, 3).join("/") || "http://localhost:3000";
+
     // Determine the actual amount and currency to charge
     // If USD: amount is direct. If INR: assume roughly 84 INR = 1 USD
     let currency = "usd";
@@ -43,7 +47,7 @@ export async function POST(req: Request) {
           price_data: {
             currency: currency,
             product_data: {
-              name: `RankUp: ${domain}`,
+              name: `BidToRankUp: ${domain}`,
               description: `Listing ${domain} on BidToRankUp in ${category}`,
               images: favicon ? [favicon] : [],
             },
@@ -53,8 +57,8 @@ export async function POST(req: Request) {
         },
       ],
       mode: "payment",
-      success_url: `${process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"}?success=true&domain=${encodeURIComponent(domain)}`,
-      cancel_url: `${process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"}?canceled=true`,
+      success_url: `${origin}/?success=true&domain=${encodeURIComponent(domain)}`,
+      cancel_url: `${origin}/?canceled=true`,
       metadata: {
         domain,
         name,
