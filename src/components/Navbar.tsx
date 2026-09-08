@@ -60,6 +60,12 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenSubmit, stats }) => {
             Rules
           </Link>
           <Link
+            href="/faq"
+            className="hover:text-emerald-600 dark:hover:text-emerald-400 transition hidden sm:block"
+          >
+            FAQ
+          </Link>
+          <Link
             href="/privacy"
             className="hover:text-emerald-600 dark:hover:text-emerald-400 transition hidden md:block"
           >

@@ -27,14 +27,14 @@ export default function ContactPage() {
             <div className="space-y-4">
               <div>
                 <h3 className="font-semibold text-zinc-900 dark:text-zinc-200">Email Address</h3>
-                <p>bidtorankup@gmail.com</p>
+                <p>foundersrankboard@gmail.com</p>
                 <p className="text-sm text-zinc-500 mt-1">We aim to respond to all inquiries within 24-48 business hours.</p>
               </div>
 
               <div>
                 <h3 className="font-semibold text-zinc-900 dark:text-zinc-200">Business Address</h3>
                 <p>FoundersRankBoard</p>
-                <p>Akashaya Nilaya ,Alape,padil post,Mangalore, Karnataka - 575007</p>
+                <p>Mangalore, Karnataka - 575007</p>
                 <p>India</p>
               </div>
               

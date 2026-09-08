@@ -20,6 +20,7 @@ export const Footer: React.FC = () => {
           {/* Links for Compliance */}
           <div className="flex flex-wrap items-center justify-center gap-4 text-[11px] text-zinc-500 font-medium">
             <a href="/about" className="hover:text-zinc-800 dark:hover:text-zinc-300">About Us</a>
+            <a href="/faq" className="hover:text-zinc-800 dark:hover:text-zinc-300">FAQ</a>
             <a href="/contact" className="hover:text-zinc-800 dark:hover:text-zinc-300">Contact Us</a>
             <a href="/rules" className="hover:text-zinc-800 dark:hover:text-zinc-300">Terms & Conditions</a>
             <a href="/privacy" className="hover:text-zinc-800 dark:hover:text-zinc-300">Privacy Policy</a>
