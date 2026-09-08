@@ -6,8 +6,8 @@ import { Footer } from "../../components/Footer";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Rules & How It Works - BidToRankUp",
-  description: "Official rules, bidding mechanics, and outbid system for BidToRankUp.",
+  title: "Rules & How It Works - FoundersRankBoard",
+  description: "Official rules, bidding mechanics, and outbid system for FoundersRankBoard.",
 };
 
 export default function RulesPage() {
@@ -86,7 +86,7 @@ export default function RulesPage() {
           Rules & <span className="text-emerald-600 dark:text-emerald-400">How It Works</span>
         </h1>
         <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed">
-          The official bidding guide, outbid calculations, and content standards for BidToRankUp.
+          The official bidding guide, outbid calculations, and content standards for FoundersRankBoard.
         </p>
 
         {/* Rules Grid */}

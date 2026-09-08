@@ -6,8 +6,8 @@ import { Footer } from "../../components/Footer";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "About Us - BidToRankUp",
-  description: "Learn about BidToRankUp: the frictionless pay-to-rank domain leaderboard in USD.",
+  title: "About Us - FoundersRankBoard",
+  description: "Learn about FoundersRankBoard: the frictionless pay-to-rank domain leaderboard in USD.",
 };
 
 export default function AboutPage() {
@@ -45,7 +45,7 @@ export default function AboutPage() {
         </div>
 
         <h1 className="text-3xl sm:text-4xl font-black text-zinc-900 dark:text-white tracking-tight">
-          About <span className="text-emerald-600 dark:text-emerald-400">BidToRankUp</span>
+          About <span className="text-emerald-600 dark:text-emerald-400">FoundersRankBoard</span>
         </h1>
         <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed">
           The frictionless, algorithmic marketing board designed for founders, indie builders, and innovative tech products.
@@ -54,7 +54,7 @@ export default function AboutPage() {
         {/* Narrative Section */}
         <div className="mt-8 space-y-6 text-sm text-zinc-700 dark:text-zinc-300 leading-relaxed border-t border-zinc-200 dark:border-[#162319] pt-8">
           <p>
-            BidToRankUp was created to solve a fundamental problem in internet marketing: <strong className="text-zinc-900 dark:text-white">distribution is broken, expensive, and filled with friction.</strong>
+            FoundersRankBoard was created to solve a fundamental problem in internet marketing: <strong className="text-zinc-900 dark:text-white">distribution is broken, expensive, and filled with friction.</strong>
           </p>
 
           <p>
@@ -106,7 +106,7 @@ export default function AboutPage() {
 
           <h2 className="text-lg font-bold text-zinc-900 dark:text-white pt-4">Global Leaderboard, Local Payments</h2>
           <p>
-            While the leaderboard rankings are priced globally in USD ($), BidToRankUp natively supports seamless checkout in Indian Rupees (₹). You can easily pay using UPI (Google Pay, PhonePe, Paytm, BHIM) alongside standard debit/credit cards, removing the friction typically associated with global ad platforms.
+            While the leaderboard rankings are priced globally in USD ($), FoundersRankBoard natively supports seamless checkout in Indian Rupees (₹). You can easily pay using UPI (Google Pay, PhonePe, Paytm, BHIM) alongside standard debit/credit cards, removing the friction typically associated with global ad platforms.
           </p>
 
           {/* CTA Box */}

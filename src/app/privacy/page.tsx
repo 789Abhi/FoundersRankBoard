@@ -6,8 +6,8 @@ import { Footer } from "../../components/Footer";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Privacy Policy - BidToRankUp",
-  description: "Privacy Policy for BidToRankUp: zero registration, no password collection, safe outbound links.",
+  title: "Privacy Policy - FoundersRankBoard",
+  description: "Privacy Policy for FoundersRankBoard: zero registration, no password collection, safe outbound links.",
 };
 
 export default function PrivacyPage() {
@@ -86,7 +86,7 @@ export default function PrivacyPage() {
               <span>3. Payment Information</span>
             </div>
             <p className="text-xs text-zinc-600 dark:text-zinc-400 leading-relaxed">
-              All payment transactions are conducted through secure, PCI-DSS compliant third-party payment gateways (UPI, debit/credit cards). BidToRankUp does not capture, process, or store credit card numbers or UPI PINs on its infrastructure.
+              All payment transactions are conducted through secure, PCI-DSS compliant third-party payment gateways (UPI, debit/credit cards). FoundersRankBoard does not capture, process, or store credit card numbers or UPI PINs on its infrastructure.
             </p>
           </div>
 
@@ -115,7 +115,7 @@ export default function PrivacyPage() {
             className="inline-flex items-center gap-2 text-xs font-semibold text-zinc-600 hover:text-emerald-600 dark:text-zinc-400 dark:hover:text-emerald-400 transition"
           >
             <ArrowLeft className="h-4 w-4" />
-            <span>Return to BidToRankUp Leaderboard</span>
+            <span>Return to FoundersRankBoard Leaderboard</span>
           </Link>
         </div>
       </div>

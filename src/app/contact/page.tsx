@@ -33,7 +33,7 @@ export default function ContactPage() {
 
               <div>
                 <h3 className="font-semibold text-zinc-900 dark:text-zinc-200">Business Address</h3>
-                <p>BidToRankUp</p>
+                <p>FoundersRankBoard</p>
                 <p>Akashaya Nilaya ,Alape,padil post,Mangalore, Karnataka - 575007</p>
                 <p>India</p>
               </div>

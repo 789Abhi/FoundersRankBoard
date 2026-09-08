@@ -56,7 +56,7 @@ export const BrandLogo: React.FC<BrandLogoProps> = ({
       {showText && (
         <div className="flex items-center gap-1.5">
           <span className={`font-black tracking-tight text-zinc-900 dark:text-white ${textSize}`}>
-            BidTo<span className="text-emerald-600 dark:text-emerald-400">RankUp</span>
+            Founders<span className="text-emerald-600 dark:text-emerald-400">RankBoard</span>
           </span>
           <span className="hidden sm:inline-flex items-center rounded-md bg-emerald-500/10 px-1.5 py-0.5 text-[9px] font-bold text-emerald-700 dark:text-emerald-400 border border-emerald-500/20 uppercase tracking-wider">
             .com

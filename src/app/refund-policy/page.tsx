@@ -21,7 +21,7 @@ export default function RefundPolicyPage() {
           
           <h2 className="text-2xl font-bold text-zinc-900 dark:text-white mt-8 mb-4">1. General Policy</h2>
           <p>
-            BidToRankUp provides a digital advertising space in the form of a leaderboard. Due to the nature of digital goods and immediate visibility of your listing upon payment, all sales are considered final. 
+            FoundersRankBoard provides a digital advertising space in the form of a leaderboard. Due to the nature of digital goods and immediate visibility of your listing upon payment, all sales are considered final. 
           </p>
 
           <h2 className="text-2xl font-bold text-zinc-900 dark:text-white mt-8 mb-4">2. Cancellations</h2>

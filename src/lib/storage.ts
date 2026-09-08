@@ -23,7 +23,7 @@ function mapListing(dbItem: any): WebsiteListing {
   };
 }
 
-const CACHE_KEY = "bidtorankup_listings_cache";
+const CACHE_KEY = "FoundersRankBoard_listings_cache";
 const CACHE_TTL_MS = 30_000; // 30 seconds
 
 // In-memory cache for the current session (fastest access)

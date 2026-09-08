@@ -21,7 +21,7 @@ export const HowItWorks: React.FC<{ onOpenSubmit: () => void }> = ({ onOpenSubmi
       step: "03",
       icon: <MousePointerClick className="h-6 w-6 text-emerald-400" />,
       title: "Get Maximum Clicks & Backlinks",
-      desc: "Thousands of tech founders, investors, and early adopters browse BidToRankUp daily. Your rank drives high-intent referral traffic.",
+      desc: "Thousands of tech founders, investors, and early adopters browse FoundersRankBoard daily. Your rank drives high-intent referral traffic.",
     },
   ];
 
@@ -34,7 +34,7 @@ export const HowItWorks: React.FC<{ onOpenSubmit: () => void }> = ({ onOpenSubmi
             Simple & Transparent Economics
           </div>
           <h2 className="text-2xl font-extrabold text-white sm:text-3xl">
-            How Does BidToRankUp Work?
+            How Does FoundersRankBoard Work?
           </h2>
           <p className="mt-2 text-xs sm:text-sm text-zinc-400">
             A frictionless marketing channel inspired by internet legends. Designed for ambitious founders who want immediate distribution.

@@ -15,33 +15,33 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://bidtorankup.com"),
+  metadataBase: new URL("https://foundersrankboard.com"),
   title: {
-    default: "BidToRankUp - The Pay-to-Rank Domain Leaderboard",
-    template: "%s | BidToRankUp"
+    default: "FoundersRankBoard - The Pay-to-Rank Domain Leaderboard",
+    template: "%s | FoundersRankBoard"
   },
   description: "Climb the ultimate domain leaderboard. Bid with your website to rank #1 and get instant high-quality traffic, exposure, and backlinks for ambitious startups.",
   keywords: [
-    "bid to rank up", "domain leaderboard", "startup directory", "pay to rank", 
+    "founders rank board", "domain leaderboard", "startup directory", "pay to rank", 
     "dofollow backlinks", "indie hackers", "SaaS marketing", "website ranking",
     "launch directory", "founder tools"
   ],
-  authors: [{ name: "BidToRankUp" }],
-  creator: "BidToRankUp",
-  publisher: "BidToRankUp",
+  authors: [{ name: "FoundersRankBoard" }],
+  creator: "FoundersRankBoard",
+  publisher: "FoundersRankBoard",
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://bidtorankup.com",
-    title: "BidToRankUp - Rank #1 on the Global Leaderboard",
+    url: "https://foundersrankboard.com",
+    title: "FoundersRankBoard - Rank #1 on the Global Leaderboard",
     description: "The leaderboard where the highest bid ranks #1. Outbid competitors, dominate your category, and drive massive traffic to your startup.",
-    siteName: "BidToRankUp",
+    siteName: "FoundersRankBoard",
   },
   twitter: {
     card: "summary_large_image",
-    title: "BidToRankUp - The Global Domain Leaderboard",
+    title: "FoundersRankBoard - The Global Domain Leaderboard",
     description: "Climb the leaderboard and drive traffic to your startup. Highest bid ranks #1.",
-    creator: "@BidToRankUp",
+    creator: "@FoundersRankBoard",
   },
   robots: {
     index: true,

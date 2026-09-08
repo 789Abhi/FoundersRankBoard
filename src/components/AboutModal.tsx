@@ -32,7 +32,7 @@ export const AboutModal: React.FC<AboutModalProps> = ({
             <TrendingUp className="h-5 w-5 stroke-[3]" />
           </div>
           <div>
-            <h2 className="text-xl font-extrabold text-white">About BidToRankUp</h2>
+            <h2 className="text-xl font-extrabold text-white">About FoundersRankBoard</h2>
             <p className="text-xs text-emerald-400">The Frictionless Pay-to-Rank Marketing Board</p>
           </div>
         </div>
@@ -40,7 +40,7 @@ export const AboutModal: React.FC<AboutModalProps> = ({
         {/* Content */}
         <div className="mt-6 space-y-4 text-xs sm:text-sm text-zinc-300 leading-relaxed">
           <p>
-            <strong className="text-white">BidToRankUp</strong> is a transparent digital billboard and dynamic marketing directory built for indie hackers, startup founders, and modern creators.
+            <strong className="text-white">FoundersRankBoard</strong> is a transparent digital billboard and dynamic marketing directory built for indie hackers, startup founders, and modern creators.
           </p>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
@@ -70,7 +70,7 @@ export const AboutModal: React.FC<AboutModalProps> = ({
               Why Not Traditional Ads?
             </h4>
             <p className="text-xs text-zinc-400">
-              Traditional ads charge per impression with zero permanence. On BidToRankUp, your domain stays listed on the board permanently unless outbid, and your payment is credited transparently to your cumulative domain score.
+              Traditional ads charge per impression with zero permanence. On FoundersRankBoard, your domain stays listed on the board permanently unless outbid, and your payment is credited transparently to your cumulative domain score.
             </p>
           </div>
         </div>

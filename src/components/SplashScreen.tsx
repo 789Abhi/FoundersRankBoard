@@ -71,7 +71,7 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({ onComplete }) => {
           {/* Brand name */}
           <div className="flex flex-col items-center gap-2">
             <h1 className="text-4xl font-black tracking-tight text-white">
-              BidTo<span className="text-emerald-400">RankUp</span>
+              Founders<span className="text-emerald-400">RankBoard</span>
             </h1>
             <p className="text-sm font-medium text-zinc-500 tracking-widest uppercase">
               Pay · Rank · Dominate

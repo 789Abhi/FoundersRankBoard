@@ -169,7 +169,7 @@ export const CleanHero: React.FC<CleanHeroProps> = ({
       onQuickSubmit({
         domain: cleaned,
         name: activeTitle || `${brandCapital} · ${cleaned}`,
-        tagline: activeDesc || `Discover ${cleaned} live on BidToRankUp.`,
+        tagline: activeDesc || `Discover ${cleaned} live on FoundersRankBoard.`,
         category: category !== "All" ? category : "Marketing & Advertising",
         amountUSD: Math.max(5, amount),
         favicon: activeFavicon || undefined,

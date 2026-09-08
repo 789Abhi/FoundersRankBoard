@@ -151,7 +151,7 @@ function SubmitContent() {
         key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || "rzp_test_dummy", // Enter the Key ID generated from the Dashboard
         amount: data.order.amount, 
         currency: data.order.currency,
-        name: "BidToRankUp",
+        name: "FoundersRankBoard",
         description: `Boost ${clean} on Leaderboard`,
         order_id: data.order.id,
         handler: async function (response: any) {

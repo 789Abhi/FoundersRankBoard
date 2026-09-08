@@ -29,7 +29,7 @@ export const Footer: React.FC = () => {
           {/* Footer Rights */}
           <div className="flex items-center gap-4">
             <span className="text-[11px] text-zinc-500 text-center md:text-right">
-              © {new Date().getFullYear()} BidToRankUp. All rights reserved.
+              © {new Date().getFullYear()} FoundersRankBoard. All rights reserved.
             </span>
           </div>
         </div>
