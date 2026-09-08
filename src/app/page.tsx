@@ -212,23 +212,32 @@ export default function Home() {
 
       {/* Footer */}
       <footer className="border-t border-zinc-200/80 dark:border-[#121c15] bg-white dark:bg-[#040705] py-10 text-xs text-zinc-500 text-center transition-colors">
-        <div className="mx-auto max-w-4xl px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-2">
-            <span className="h-2 w-2 rounded-full bg-emerald-500"></span>
-            <span className="font-bold text-zinc-900 dark:text-zinc-200">BidToRankUp</span>
-            <span>·</span>
-            <span>&copy; {new Date().getFullYear()}</span>
+        <div className="mx-auto max-w-5xl px-4 flex flex-col md:flex-row items-center justify-between gap-6">
+          <div className="flex flex-col md:items-start items-center gap-2">
+            <div className="flex items-center gap-2">
+              <span className="h-2 w-2 rounded-full bg-emerald-500"></span>
+              <span className="font-bold text-zinc-900 dark:text-zinc-200">BidToRankUp</span>
+              <span>·</span>
+              <span>&copy; {new Date().getFullYear()}</span>
+            </div>
+            <span className="text-[11px] text-zinc-400">The Pay-to-Rank Domain Board • Secured by Razorpay</span>
           </div>
 
-          <div className="flex items-center gap-4 text-zinc-600 dark:text-zinc-400">
+          <div className="flex flex-wrap justify-center items-center gap-4 text-zinc-600 dark:text-zinc-400 font-medium">
             <Link href="/about" className="hover:text-emerald-600 dark:hover:text-emerald-400 transition">
               About Us
             </Link>
+            <Link href="/contact" className="hover:text-emerald-600 dark:hover:text-emerald-400 transition">
+              Contact Us
+            </Link>
             <Link href="/rules" className="hover:text-emerald-600 dark:hover:text-emerald-400 transition">
-              Rules
+              Terms & Conditions
             </Link>
             <Link href="/privacy" className="hover:text-emerald-600 dark:hover:text-emerald-400 transition">
               Privacy Policy
+            </Link>
+            <Link href="/refund-policy" className="hover:text-emerald-600 dark:hover:text-emerald-400 transition">
+              Cancellation & Refund Policy
             </Link>
           </div>
         </div>
