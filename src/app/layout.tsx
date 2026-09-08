@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import Script from "next/script";
 import "./globals.css";
 import { ThemeProvider } from "../components/ThemeProvider";
 
@@ -70,6 +71,9 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} dark`}
       suppressHydrationWarning
     >
+      <head>
+        <Script src="https://checkout.razorpay.com/v1/checkout.js" strategy="beforeInteractive" />
+      </head>
       <body className="min-h-screen bg-[#f8faf9] text-zinc-900 dark:bg-[#060907] dark:text-zinc-100 antialiased selection:bg-emerald-500 selection:text-zinc-950 transition-colors duration-200">
         <ThemeProvider>
           {children}

@@ -124,27 +124,72 @@ function SubmitContent() {
         } catch {}
       }
 
-      const response = await fetch("/api/checkout", {
+      const orderPayload = {
+        domain: clean,
+        name: activeTitle || name.trim() || undefined,
+        url: ensureProtocol(domain),
+        tagline: activeDesc || tagline.trim() || undefined,
+        category,
+        amountUSD: Number(amount),
+        favicon: activeFavicon || undefined,
+      };
+
+      const response = await fetch("/api/razorpay/create-order", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          domain: clean,
-          name: activeTitle || name.trim() || undefined,
-          url: ensureProtocol(domain),
-          tagline: activeDesc || tagline.trim() || undefined,
-          category,
-          amountUSD: Number(amount),
-          currencyPref,
-          favicon: activeFavicon || undefined,
-        }),
+        body: JSON.stringify(orderPayload),
       });
 
-      const session = await response.json();
-      if (session.url) {
-        window.location.href = session.url;
-      } else {
-        setError(session.error || "Failed to initialize payment gateway.");
+      const data = await response.json();
+      if (!data.order) {
+        setError(data.error || "Failed to initialize Razorpay payment.");
+        setIsSubmitting(false);
+        return;
       }
+
+      const options = {
+        key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || "rzp_test_dummy", // Enter the Key ID generated from the Dashboard
+        amount: data.order.amount, 
+        currency: data.order.currency,
+        name: "BidToRankUp",
+        description: `Boost ${clean} on Leaderboard`,
+        order_id: data.order.id,
+        handler: async function (response: any) {
+          try {
+            const verifyRes = await fetch("/api/razorpay/verify", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                ...response,
+                notes: data.order.notes
+              }),
+            });
+            const verifyData = await verifyRes.json();
+            if (verifyData.success) {
+              window.location.href = `/?success=true&domain=${encodeURIComponent(clean)}`;
+            } else {
+              setError("Payment verification failed. Contact support.");
+            }
+          } catch (e) {
+            setError("Payment verification failed.");
+          }
+        },
+        prefill: {
+          name: "",
+          email: "",
+          contact: ""
+        },
+        theme: {
+          color: "#10b981" // emerald-500
+        }
+      };
+
+      const rzp = new (window as any).Razorpay(options);
+      rzp.on("payment.failed", function (response: any) {
+        setError(response.error.description || "Payment failed.");
+      });
+      rzp.open();
+
     } catch (err: any) {
       setError("Something went wrong. Please try again.");
     } finally {
@@ -302,7 +347,7 @@ function SubmitContent() {
           <div className="mt-8 flex flex-col gap-3">
             <button
               type="button"
-              onClick={() => handleProceed("usd")}
+              onClick={() => handleProceed("inr")}
               disabled={isSubmitting}
               className="w-full rounded-xl bg-emerald-500 hover:bg-emerald-400 active:scale-[0.99] py-4 text-sm font-bold text-zinc-950 transition flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/25 disabled:opacity-50 cursor-pointer"
             >
@@ -312,22 +357,13 @@ function SubmitContent() {
                   <span>Preparing Checkout...</span>
                 </>
               ) : (
-                <span>Pay {formatUSD(Math.max(5, amount))} Globally (Cards / Apple Pay)</span>
+                <span>Pay {formatUSD(Math.max(5, amount))} (Cards / UPI / Netbanking)</span>
               )}
             </button>
             
-            <button
-              type="button"
-              onClick={() => handleProceed("inr")}
-              disabled={isSubmitting}
-              className="w-full rounded-xl border border-zinc-200 dark:border-[#1b281f] bg-zinc-50 hover:bg-zinc-100 dark:bg-[#0c120e] dark:hover:bg-[#111712] active:scale-[0.99] py-4 text-sm font-bold text-zinc-700 dark:text-zinc-300 transition flex items-center justify-center gap-2 disabled:opacity-50 cursor-pointer"
-            >
-              <span>Pay ₹{Math.round(Math.max(5, amount) * exchangeRate)} (India - UPI / Netbanking)</span>
-            </button>
-
             <div className="mt-3 flex items-center justify-center gap-1.5 text-xs text-zinc-500">
               <ShieldCheck className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
-              <span>Secured by Stripe</span>
+              <span>Secured by Razorpay</span>
             </div>
           </div>
         </form>
