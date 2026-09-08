@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { cleanDomain } from "../../../lib/utils";
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
@@ -9,14 +10,7 @@ export async function GET(request: Request) {
   }
 
   // Clean domain string
-  let domain = rawDomain
-    .trim()
-    .toLowerCase()
-    .replace(/^https?:\/\//i, "")
-    .replace(/^www\./i, "")
-    .split("/")[0]
-    .split("?")[0]
-    .split("#")[0];
+  let domain = cleanDomain(rawDomain);
 
   const browserHeaders = {
     "User-Agent":
@@ -116,7 +110,15 @@ export async function GET(request: Request) {
       html.match(/<link[^>]+rel=["'](?:icon|shortcut icon)["'][^>]+href=["']([^"']+)["']/i) ||
       html.match(/<link[^>]+href=["']([^"']+)["'][^>]+rel=["'](?:icon|shortcut icon)["']/i);
 
-    const rawIcon = appleIconMatch?.[1] || svgIconMatch?.[1] || standardIconMatch?.[1];
+    let rawIcon = appleIconMatch?.[1] || svgIconMatch?.[1] || standardIconMatch?.[1];
+
+    // For YouTube handles, prefer the og:image as it contains the high-res profile picture
+    if (domain.includes("youtube.com")) {
+      const ogImage = extractMetaContent(html, "property", "og:image") || extractMetaContent(html, "name", "twitter:image");
+      if (ogImage) {
+        rawIcon = ogImage;
+      }
+    }
 
     if (rawIcon) {
       try {

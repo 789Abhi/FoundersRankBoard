@@ -13,7 +13,7 @@ interface NavbarProps {
 }
 
 export const Navbar: React.FC<NavbarProps> = ({ onOpenSubmit, stats }) => {
-  const { theme, toggleTheme } = useTheme();
+  const { theme, toggleTheme, mounted } = useTheme();
 
   return (
     <header className="sticky top-0 z-40 w-full border-b border-zinc-200/80 dark:border-[#141f17] bg-white/85 dark:bg-[#060907]/85 backdrop-blur-xl transition-colors">
@@ -75,13 +75,18 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenSubmit, stats }) => {
           {/* Light / Dark Mode Toggle Button */}
           <button
             onClick={toggleTheme}
+            suppressHydrationWarning
             aria-label="Toggle Light/Dark Theme"
             className="flex h-8 w-8 items-center justify-center rounded-xl border border-zinc-200 dark:border-[#223526] bg-zinc-100 dark:bg-[#0c140f] text-zinc-700 dark:text-zinc-300 hover:text-emerald-600 dark:hover:text-emerald-400 hover:border-emerald-500/50 transition active:scale-90 shadow-sm"
           >
-            {theme === "dark" ? (
-              <Sun className="h-4 w-4 text-amber-400 transition-transform rotate-0" />
+            {mounted ? (
+              theme === "dark" ? (
+                <Sun className="h-4 w-4 text-amber-400 transition-transform rotate-0" />
+              ) : (
+                <Moon className="h-4 w-4 text-zinc-700 transition-transform rotate-0" />
+              )
             ) : (
-              <Moon className="h-4 w-4 text-zinc-700 transition-transform rotate-0" />
+              <div className="h-4 w-4" /> // placeholder during SSR
             )}
           </button>
 

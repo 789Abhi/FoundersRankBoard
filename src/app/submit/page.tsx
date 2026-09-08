@@ -66,11 +66,27 @@ function SubmitContent() {
     return () => { isMounted = false; };
   }, []);
 
-  // Set initial favicon if domain exists
+  // Real-time favicon and metadata fetch
   useEffect(() => {
     const cleaned = cleanDomain(domain);
     if (cleaned && cleaned.includes(".")) {
       setFaviconSrc(getFaviconUrl(cleaned));
+      
+      // Auto-fetch metadata so the preview updates before they click submit
+      const timer = setTimeout(async () => {
+        try {
+          const res = await fetch(`/api/fetch-meta?domain=${encodeURIComponent(cleaned)}`);
+          if (res.ok) {
+            const data = await res.json();
+            if (data.favicon) {
+              setFaviconSrc(data.favicon);
+            }
+          }
+        } catch {
+          // ignore
+        }
+      }, 500);
+      return () => clearTimeout(timer);
     } else {
       setFaviconSrc("");
     }
@@ -86,6 +102,11 @@ function SubmitContent() {
     const cleaned = cleanDomain(domain);
     return listings.find((l) => cleanDomain(l.domain) === cleaned) || null;
   }, [domain, targetListing, listings]);
+
+  // Generate Rank Prediction based on input amount
+  const rankPrediction = useMemo(() => {
+    return calculateRanks(listings, Number(amount) || 5, category, existingListing?.id);
+  }, [listings, amount, category, existingListing]);
 
   const ranks = calculateRanks(
     listings,

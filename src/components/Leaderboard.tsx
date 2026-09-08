@@ -99,6 +99,7 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({
                 categoryRank={categoryRank > 0 ? categoryRank : 1}
                 outbidAmountSuggested={suggestedAddAmount}
                 targetDomainAbove={targetListing?.domain}
+                isCategoryView={selectedCategory !== "All"}
                 onBoost={onBoost}
                 onTrackClick={onTrackClick}
               />

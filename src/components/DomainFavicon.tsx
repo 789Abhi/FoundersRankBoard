@@ -150,6 +150,7 @@ export const DomainFavicon: React.FC<DomainFaviconProps> = ({
           onLoad={() => setLoadState("loaded")}
           onError={handleError}
           loading="lazy"
+          referrerPolicy="no-referrer"
           ref={(img) => {
             if (img?.complete && img.naturalWidth > 0 && loadState !== "loaded") {
               setLoadState("loaded");

@@ -23,13 +23,28 @@ export function formatUSD(amount: number): string {
 
 /**
  * Clean domain string (e.g. https://www.kombai.com/pricing -> kombai.com)
+ * Supports YouTube handles (e.g. @mkbhd -> youtube.com/@mkbhd)
  */
 export function cleanDomain(urlOrDomain: string): string {
   if (!urlOrDomain) return "";
   try {
     let clean = urlOrDomain.trim().toLowerCase();
+    
+    // Support youtube handle directly e.g. @mkbhd -> youtube.com/@mkbhd
+    if (clean.startsWith('@')) {
+      clean = 'youtube.com/' + clean;
+    }
+    
     clean = clean.replace(/^https?:\/\//i, "");
     clean = clean.replace(/^www\./i, "");
+    
+    // If it is a YouTube channel/handle, keep the path
+    if (clean.startsWith("youtube.com/@") || clean.startsWith("youtube.com/c/") || clean.startsWith("youtube.com/channel/")) {
+      clean = clean.split("?")[0].split("#")[0];
+      clean = clean.replace(/\/$/, ""); // remove trailing slash
+      return clean;
+    }
+    
     clean = clean.split("/")[0];
     clean = clean.split("?")[0];
     clean = clean.split("#")[0];
@@ -59,6 +74,14 @@ export function getFaviconUrl(domain: string, directFavicon?: string): string {
   }
   const cleaned = cleanDomain(domain);
   if (!cleaned || cleaned.length < 3) return "";
+
+  // For YouTube URLs, Google S2 will aggressively strip the handle and just return
+  // the generic YouTube play button logo. We return empty so the UI waits for
+  // the actual fetch-meta API to return the user's high-res channel profile picture.
+  if (cleaned.includes("youtube.com")) {
+    return "";
+  }
+
   return `https://www.google.com/s2/favicons?domain=${cleaned}&sz=128&default_icon=none`;
 }
 
@@ -68,6 +91,7 @@ export function getFaviconUrl(domain: string, directFavicon?: string): string {
 export function getFallbackFaviconUrl(domain: string): string {
   const cleaned = cleanDomain(domain);
   if (!cleaned || cleaned.length < 3) return "";
+  if (cleaned.includes("youtube.com")) return "";
   return `https://www.google.com/s2/favicons?domain=${cleaned}&sz=128&default_icon=none`;
 }
 

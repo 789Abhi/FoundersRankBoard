@@ -48,7 +48,7 @@ import {
   Home, 
   PenTool, 
   Headphones, 
-  Trophy 
+  Trophy
 } from "lucide-react";
 
 interface LeaderboardCardProps {
@@ -57,6 +57,7 @@ interface LeaderboardCardProps {
   categoryRank: number;
   outbidAmountSuggested: number;
   targetDomainAbove?: string;
+  isCategoryView?: boolean;
   onBoost: (listing: WebsiteListing, suggestedAddAmount: number) => void;
   onTrackClick: (listingId: string) => void;
 }
@@ -99,11 +100,12 @@ const LeaderboardCardInner: React.FC<LeaderboardCardProps> = ({
   rank,
   categoryRank,
   outbidAmountSuggested,
+  isCategoryView = false,
   onBoost,
   onTrackClick,
 }) => {
   const [imgError, setImgError] = useState(false);
-  const isFirst = rank === 1;
+  const isFirst = isCategoryView ? categoryRank === 1 : rank === 1;
 
   // Live timer tick to continuously gauge relative time ("just now", "10m ago", etc.)
   const [, setTick] = useState(0);
@@ -112,13 +114,13 @@ const LeaderboardCardInner: React.FC<LeaderboardCardProps> = ({
     return () => clearInterval(timer);
   }, []);
 
-  // Format title display: "Website Name · Tagline / Description"
+  // Format title display: "Website Name · Domain"
   const displayName = React.useMemo(() => {
     if (!listing.name) return listing.domain;
     if (listing.name.toLowerCase().includes(listing.domain.toLowerCase())) {
       return listing.name;
     }
-    return `${listing.domain} · ${listing.name}`;
+    return `${listing.name} · ${listing.domain}`;
   }, [listing.domain, listing.name]);
 
   return (
@@ -136,8 +138,8 @@ const LeaderboardCardInner: React.FC<LeaderboardCardProps> = ({
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         {/* Left Section: Rank + Logo Tile + Info */}
         <div className="flex items-start sm:items-center gap-3.5 sm:gap-4 min-w-0 flex-1">
-          {/* Rank Number (e.g. #1 in coral accent) */}
-          <div className="flex-shrink-0 text-center min-w-[28px] sm:min-w-[34px]">
+          {/* Rank Number */}
+          <div className="flex-shrink-0 text-center min-w-[32px] sm:min-w-[38px]">
             <span
               className={`text-base sm:text-lg font-black tracking-tight ${
                 isFirst
@@ -145,21 +147,31 @@ const LeaderboardCardInner: React.FC<LeaderboardCardProps> = ({
                   : "text-zinc-400 dark:text-zinc-500"
               }`}
             >
-              #{rank}
+              #{isCategoryView ? categoryRank : rank}
             </span>
-            <div className="text-[9px] font-semibold text-emerald-600 dark:text-emerald-400/90 leading-tight">
-              #{categoryRank} cat
+            <div className="text-[9px] sm:text-[10px] font-semibold text-emerald-600 dark:text-emerald-400/90 leading-tight whitespace-nowrap mt-0.5">
+              #{isCategoryView ? `${rank} Overall` : `${categoryRank} cat`}
             </div>
           </div>
 
           {/* Logo Tile with HD Globe fallback & crisp favicon */}
-          <div className="flex-shrink-0">
+          <div className="flex-shrink-0 relative">
             <DomainFavicon
               domain={listing.domain}
               name={listing.name}
               customFavicon={listing.favicon}
               size="lg"
             />
+            {listing.domain.includes('youtube.com') && (
+              <div 
+                className="absolute -bottom-1 -right-1 bg-[#ff0000] rounded-full p-0.5 border-2 border-white dark:border-[#0a0f0c] shadow-sm flex items-center justify-center"
+                title="YouTube Channel"
+              >
+                <svg viewBox="0 0 24 24" fill="currentColor" className="w-3.5 h-3.5 text-white">
+                  <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                </svg>
+              </div>
+            )}
           </div>
 
           {/* Middle Content */}

@@ -8,12 +8,14 @@ interface ThemeContextType {
   theme: Theme;
   toggleTheme: () => void;
   setTheme: (theme: Theme) => void;
+  mounted: boolean;
 }
 
 const ThemeContext = createContext<ThemeContextType>({
   theme: "dark",
   toggleTheme: () => {},
   setTheme: () => {},
+  mounted: false,
 });
 
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -65,7 +67,7 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   };
 
   return (
-    <ThemeContext.Provider value={{ theme, toggleTheme, setTheme }}>
+    <ThemeContext.Provider value={{ theme, toggleTheme, setTheme, mounted }}>
       {children}
     </ThemeContext.Provider>
   );
