@@ -155,6 +155,7 @@ function SubmitContent() {
         description: `Boost ${clean} on Leaderboard`,
         order_id: data.order.id,
         handler: async function (response: any) {
+          setIsSubmitting(true);
           try {
             const verifyRes = await fetch("/api/razorpay/verify", {
               method: "POST",
@@ -166,12 +167,14 @@ function SubmitContent() {
             });
             const verifyData = await verifyRes.json();
             if (verifyData.success) {
-              window.location.href = `/?success=true&domain=${encodeURIComponent(clean)}`;
+              router.push(`/?success=true&domain=${encodeURIComponent(clean)}`);
             } else {
               setError("Payment verification failed. Contact support.");
+              setIsSubmitting(false);
             }
           } catch (e) {
             setError("Payment verification failed.");
+            setIsSubmitting(false);
           }
         },
         prefill: {
@@ -181,20 +184,26 @@ function SubmitContent() {
         },
         theme: {
           color: "#10b981" // emerald-500
+        },
+        modal: {
+          ondismiss: function() {
+            setIsSubmitting(false);
+          }
         }
       };
 
       const rzp = new (window as any).Razorpay(options);
       rzp.on("payment.failed", function (response: any) {
         setError(response.error.description || "Payment failed.");
+        setIsSubmitting(false);
       });
       rzp.open();
 
     } catch (err: any) {
       setError("Something went wrong. Please try again.");
-    } finally {
       setIsSubmitting(false);
     }
+    // removed finally block so isSubmitting stays true while modal is open
   };
 
   return (

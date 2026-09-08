@@ -171,8 +171,8 @@ export default function Home() {
 
   const handleTrackClick = async (listingId: string) => {
     await trackOutboundClick(listingId);
-    // Optimistic UI update for click
-    const updated = listings.map(l => l.id === listingId ? { ...l, clicks: (l.clicks || 0) + 1 } : l);
+    // Optimistic UI update for click and time
+    const updated = listings.map(l => l.id === listingId ? { ...l, clicks: (l.clicks || 0) + 1, lastClickedAt: new Date().toISOString() } : l);
     setListings(updated);
     setStats(calculateStats(updated));
   };
