@@ -58,7 +58,7 @@ export const metadata: Metadata = {
     canonical: "https://foundersrankboard.com",
   },
   verification: {
-    google: "google2c583da9c5172027",
+    google: "YwFGEl8S9-CJ0h7xMTi8GVkSFzH1CLMugcLTyN5vYIk",
   },
   icons: {
     icon: "/icon.svg",
@@ -108,7 +108,10 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       </head>
-      <body className="min-h-screen bg-[#f8faf9] text-zinc-900 dark:bg-[#060907] dark:text-zinc-100 antialiased selection:bg-emerald-500 selection:text-zinc-950 transition-colors duration-200">
+      <body
+        className="min-h-screen bg-[#f8faf9] text-zinc-900 dark:bg-[#060907] dark:text-zinc-100 antialiased selection:bg-emerald-500 selection:text-zinc-950 transition-colors duration-200"
+        suppressHydrationWarning
+      >
         <ThemeProvider>
           {children}
         </ThemeProvider>

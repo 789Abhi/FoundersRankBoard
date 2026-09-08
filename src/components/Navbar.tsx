@@ -94,6 +94,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenSubmit, stats }) => {
           {/* List Domain CTA */}
           <button
             onClick={onOpenSubmit}
+            suppressHydrationWarning
             className="inline-flex items-center gap-1 rounded-full bg-emerald-500 hover:bg-emerald-400 active:scale-95 px-2.5 sm:px-4 py-1.5 sm:py-2 text-[11px] sm:text-xs font-bold text-zinc-950 shadow-md shadow-emerald-500/20 transition-all flex-shrink-0 whitespace-nowrap"
           >
             <Plus className="h-3 w-3 sm:h-3.5 sm:w-3.5 stroke-[3]" />
@@ -104,6 +105,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenSubmit, stats }) => {
           {/* Mobile Menu Hamburger */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            suppressHydrationWarning
             className="flex h-7 w-7 sm:h-8 sm:w-8 md:hidden items-center justify-center rounded-xl border border-zinc-200 dark:border-[#223526] bg-zinc-100 dark:bg-[#0c140f] text-zinc-700 dark:text-zinc-300 hover:text-emerald-600 dark:hover:text-emerald-400 transition"
             aria-label="Toggle Navigation Menu"
           >

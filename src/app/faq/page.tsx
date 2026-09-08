@@ -42,6 +42,11 @@ export default function FAQPage() {
       title: "How do payments work?",
       desc: "Payments are securely processed via Razorpay natively in Indian Rupees (INR) at real-time exchange rates. We support all major Credit/Debit Cards, UPI (GPay, PhonePe), and NetBanking.",
     },
+    {
+      num: "07",
+      title: "Can I list my YouTube channel or podcast?",
+      desc: "Yes! FoundersRankBoard natively supports YouTube channels and creator profiles. Just enter your YouTube link (e.g. youtube.com/@channel) or handle (e.g. @channel). Our system automatically extracts your official high-res circular profile photo, bio, and adds a verified YouTube badge to your leaderboard card under 'Social Media & Creator Tools'.",
+    },
   ];
 
   return (

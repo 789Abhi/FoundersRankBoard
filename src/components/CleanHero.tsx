@@ -208,10 +208,10 @@ export const CleanHero: React.FC<CleanHeroProps> = ({
       </div>
 
       {/* High-Density Quick Bid Bar */}
-      <div className="mt-4 rounded-2xl sm:rounded-3xl border border-zinc-200 dark:border-[#1e3023] bg-white dark:bg-[#0c140f] p-3 sm:p-4 shadow-xl text-left max-w-3xl mx-auto">
+      <div className="mt-4 rounded-2xl sm:rounded-3xl border border-zinc-200 dark:border-[#1e3023] bg-white dark:bg-[#0c140f] p-3 sm:p-3.5 shadow-xl text-left max-w-4xl mx-auto">
         <form onSubmit={handleSubmit} className="space-y-2.5">
           <div className="flex flex-col lg:flex-row items-stretch lg:items-center gap-2 sm:gap-2.5">
-            {/* Domain URL Input with Favicon or HD Globe (Full width on mobile/tablet, flex-1 on desktop) */}
+            {/* Domain URL Input with Favicon or HD Globe (Huge room for long URLs) */}
             <div className="relative flex-1 w-full min-w-0">
               <div className="absolute left-3 top-1/2 -translate-y-1/2 flex items-center justify-center h-5 w-5">
                 {isFetchingMeta ? (
@@ -231,6 +231,7 @@ export const CleanHero: React.FC<CleanHeroProps> = ({
 
               <input
                 type="text"
+                suppressHydrationWarning
                 placeholder={placeholders[placeholderIndex]}
                 value={domainInput}
                 onChange={(e) => setDomainInput(e.target.value)}
@@ -238,16 +239,17 @@ export const CleanHero: React.FC<CleanHeroProps> = ({
               />
             </div>
 
-            {/* Actions toolbar: neatly structured on mobile & tablet, inline on desktop */}
+            {/* Actions toolbar: neatly structured on mobile & tablet, compact on desktop */}
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full lg:w-auto">
-              {/* Custom Category Dropdown */}
-              <div className="relative w-full sm:w-52 md:w-56 flex-1 sm:flex-initial flex-shrink-0">
+              {/* Custom Category Dropdown - Compact */}
+              <div className="relative w-full sm:w-44 md:w-48 flex-1 sm:flex-initial flex-shrink-0">
                 <button
                   type="button"
+                  suppressHydrationWarning
                   onClick={() => setIsCategoryOpen(!isCategoryOpen)}
                   className="w-full flex items-center justify-between rounded-xl border border-zinc-200 dark:border-[#223526] bg-zinc-50 dark:bg-[#070b08] px-3 py-2 sm:py-2.5 text-xs font-medium text-zinc-800 dark:text-zinc-200 hover:border-emerald-500/50"
                 >
-                  <span className="truncate text-left flex-1 mr-2">{category}</span>
+                  <span className="truncate text-left flex-1 mr-1.5">{category}</span>
                   <ChevronDown className={`h-3.5 w-3.5 flex-shrink-0 text-zinc-400 dark:text-zinc-500 transition-transform ${isCategoryOpen ? "rotate-180" : ""}`} />
                 </button>
 
@@ -275,33 +277,36 @@ export const CleanHero: React.FC<CleanHeroProps> = ({
 
               {/* Amount Steppers & Rank Up Button */}
               <div className="flex items-center gap-2 w-full sm:w-auto">
-                {/* Amount with Steppers */}
-                <div className="relative flex-1 sm:w-28 md:w-32 flex-shrink-0">
-                  <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-xs font-bold text-emerald-600 dark:text-emerald-400">
+                {/* Compact Amount Stepper */}
+                <div className="relative flex-1 sm:w-20 md:w-24 flex-shrink-0">
+                  <span className="absolute left-2 top-1/2 -translate-y-1/2 text-xs font-bold text-emerald-600 dark:text-emerald-400">
                     $
                   </span>
                   <input
                     type="number"
                     min={5}
                     step={1}
+                    suppressHydrationWarning
                     value={amount}
                     onChange={(e) => handleAmountChange(Number(e.target.value))}
-                    className="w-full rounded-xl border border-zinc-200 dark:border-[#223526] bg-zinc-50 dark:bg-[#070b08] pl-6 pr-6 py-2 sm:py-2.5 text-xs sm:text-sm font-bold text-zinc-900 dark:text-white focus:border-emerald-500 focus:outline-none"
+                    className="w-full rounded-xl border border-zinc-200 dark:border-[#223526] bg-zinc-50 dark:bg-[#070b08] pl-5 pr-5 py-2 sm:py-2.5 text-xs sm:text-sm font-bold text-zinc-900 dark:text-white focus:border-emerald-500 focus:outline-none"
                   />
-                  <div className="absolute right-1.5 top-1/2 -translate-y-1/2 flex flex-col">
+                  <div className="absolute right-1 top-1/2 -translate-y-1/2 flex flex-col">
                     <button
                       type="button"
+                      suppressHydrationWarning
                       onClick={() => handleAmountChange(amount + 5)}
-                      className="text-zinc-400 hover:text-emerald-500 leading-none px-1"
+                      className="text-zinc-400 hover:text-emerald-500 leading-none px-0.5"
                     >
-                      <Plus className="h-2.5 w-2.5" />
+                      <Plus className="h-2 w-2" />
                     </button>
                     <button
                       type="button"
+                      suppressHydrationWarning
                       onClick={() => handleAmountChange(amount - 5)}
-                      className="text-zinc-400 hover:text-rose-500 leading-none px-1"
+                      className="text-zinc-400 hover:text-rose-500 leading-none px-0.5"
                     >
-                      <Minus className="h-2.5 w-2.5" />
+                      <Minus className="h-2 w-2" />
                     </button>
                   </div>
                 </div>
@@ -309,6 +314,7 @@ export const CleanHero: React.FC<CleanHeroProps> = ({
                 {/* Rank Up CTA */}
                 <button
                   type="submit"
+                  suppressHydrationWarning
                   disabled={isSubmitting}
                   className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-1.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 active:scale-95 px-4 sm:px-5 py-2 sm:py-2.5 text-xs font-bold text-zinc-950 transition shadow-md shadow-emerald-500/25 whitespace-nowrap disabled:opacity-70 disabled:cursor-not-allowed"
                 >
@@ -367,6 +373,7 @@ export const CleanHero: React.FC<CleanHeroProps> = ({
             return (
               <button
                 key={cat.name}
+                suppressHydrationWarning
                 onClick={() => onSelectCategory(cat.name)}
                 className={`rounded-full px-3 py-1 text-xs font-semibold whitespace-nowrap transition-all flex-shrink-0 ${
                   isActive
@@ -384,6 +391,7 @@ export const CleanHero: React.FC<CleanHeroProps> = ({
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-zinc-400 dark:text-zinc-500" />
           <input
             type="text"
+            suppressHydrationWarning
             placeholder="Search domain..."
             value={searchQuery}
             onChange={(e) => onSearchChange(e.target.value)}
