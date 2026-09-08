@@ -214,7 +214,10 @@ const LeaderboardCardInner: React.FC<LeaderboardCardProps> = ({
               <span>·</span>
 
               {/* Clicks */}
-              <span className="inline-flex items-center gap-1">
+              <span 
+                className="inline-flex items-center gap-1"
+                title={listing.clicks > 0 && listing.lastClickedAt ? `Last clicked: ${formatTimeAgo(listing.lastClickedAt)}` : undefined}
+              >
                 <MousePointerClick className="h-3 w-3 opacity-60" />
                 <span>{listing.clicks.toLocaleString("en-IN")} clicks</span>
               </span>
