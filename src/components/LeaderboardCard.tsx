@@ -186,18 +186,12 @@ const LeaderboardCardInner: React.FC<LeaderboardCardProps> = ({
 
               <span>·</span>
 
-              {/* Real-time Click & Action Elapsed Gauge */}
+              {/* Registered Date Gauge */}
               <span
-                title={
-                  listing.lastClickedAt
-                    ? `Last clicked: ${formatTimeAgo(listing.lastClickedAt)} (${new Date(
-                        listing.lastClickedAt
-                      ).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })})`
-                    : "Recently active"
-                }
+                title={`Registered on: ${new Date(listing.createdAt).toLocaleString()}`}
                 className="hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors"
               >
-                {formatTimeAgo(listing.lastClickedAt || listing.createdAt)}
+                Registered: {formatTimeAgo(listing.createdAt)}
               </span>
 
               <span>·</span>

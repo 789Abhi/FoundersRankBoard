@@ -1,9 +1,9 @@
 "use client";
 
-import React, { useMemo } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import { CategoryType, WebsiteListing } from "../types";
 import { LeaderboardCard } from "./LeaderboardCard";
-import { Search, Plus, Trophy } from "lucide-react";
+import { Search, Plus, Trophy, ChevronLeft, ChevronRight } from "lucide-react";
 import { getSuggestedOutbidAmount } from "../lib/utils";
 
 interface LeaderboardProps {
@@ -23,6 +23,9 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({
   onTrackClick,
   onOpenSubmit,
 }) => {
+  const [currentPage, setCurrentPage] = useState(1);
+  const ITEMS_PER_PAGE = 20;
+
   const filteredListings = useMemo(() => {
     let result = [...listings];
 
@@ -44,6 +47,18 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({
     return result;
   }, [listings, selectedCategory, searchQuery]);
 
+  // Reset to page 1 when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [selectedCategory, searchQuery]);
+
+  const totalPages = Math.ceil(filteredListings.length / ITEMS_PER_PAGE);
+
+  const paginatedListings = useMemo(() => {
+    const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+    return filteredListings.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+  }, [filteredListings, currentPage]);
+
   return (
     <section className="mx-auto max-w-4xl px-4 sm:px-6 pt-1">
       {/* Header bar */}
@@ -61,9 +76,9 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({
       </div>
 
       {/* Cards List */}
-      <div className="space-y-2.5 sm:space-y-3">
-        {filteredListings.length > 0 ? (
-          filteredListings.map((listing, index) => {
+      <div className="space-y-2.5 sm:space-y-3 pb-8">
+        {paginatedListings.length > 0 ? (
+          paginatedListings.map((listing, index) => {
             const globalRank =
               listings.findIndex((item) => item.id === listing.id) + 1;
 
@@ -80,7 +95,7 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({
               <LeaderboardCard
                 key={listing.id}
                 listing={listing}
-                rank={globalRank > 0 ? globalRank : index + 1}
+                rank={globalRank > 0 ? globalRank : ((currentPage - 1) * ITEMS_PER_PAGE) + index + 1}
                 categoryRank={categoryRank > 0 ? categoryRank : 1}
                 outbidAmountSuggested={suggestedAddAmount}
                 targetDomainAbove={targetListing?.domain}
@@ -104,6 +119,33 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({
             >
               <Plus className="h-3.5 w-3.5 stroke-[3]" />
               <span>List First in {selectedCategory} (from $5)</span>
+            </button>
+          </div>
+        )}
+
+        {/* Pagination Controls */}
+        {totalPages > 1 && (
+          <div className="flex items-center justify-center gap-4 mt-8 pt-4 border-t border-zinc-200 dark:border-[#1d2d21]">
+            <button
+              onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+              disabled={currentPage === 1}
+              className="flex items-center gap-1 px-4 py-2 text-sm font-medium text-zinc-700 dark:text-zinc-300 bg-white dark:bg-[#0c140f] border border-zinc-300 dark:border-[#1d2d21] rounded-full hover:bg-zinc-50 dark:hover:bg-[#142218] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            >
+              <ChevronLeft className="h-4 w-4" />
+              Previous
+            </button>
+            
+            <span className="text-sm font-medium text-zinc-600 dark:text-zinc-400">
+              Page {currentPage} of {totalPages}
+            </span>
+
+            <button
+              onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+              disabled={currentPage === totalPages}
+              className="flex items-center gap-1 px-4 py-2 text-sm font-medium text-zinc-700 dark:text-zinc-300 bg-white dark:bg-[#0c140f] border border-zinc-300 dark:border-[#1d2d21] rounded-full hover:bg-zinc-50 dark:hover:bg-[#142218] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            >
+              Next
+              <ChevronRight className="h-4 w-4" />
             </button>
           </div>
         )}
