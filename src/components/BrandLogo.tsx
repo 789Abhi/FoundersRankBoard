@@ -13,13 +13,13 @@ export const BrandLogo: React.FC<BrandLogoProps> = ({
   showText = true,
   size = "md",
 }) => {
-  const iconSize = size === "sm" ? "h-7 w-7" : size === "lg" ? "h-10 w-10" : "h-8 w-8";
-  const textSize = size === "sm" ? "text-sm" : size === "lg" ? "text-xl sm:text-2xl" : "text-base sm:text-lg";
+  const iconSize = size === "sm" ? "h-6 w-6 sm:h-7 sm:w-7" : size === "lg" ? "h-9 w-9 sm:h-10 sm:w-10" : "h-7 w-7 sm:h-8 sm:w-8";
+  const textSize = size === "sm" ? "text-xs sm:text-sm" : size === "lg" ? "text-lg sm:text-2xl" : "text-xs sm:text-base md:text-lg";
 
   return (
-    <div className={`flex items-center gap-2.5 ${className}`}>
+    <div className={`flex items-center gap-1.5 sm:gap-2.5 ${className}`}>
       {/* Clean Aerodynamic Rank-Up Emblem */}
-      <div className={`relative flex items-center justify-center overflow-hidden rounded-xl bg-zinc-950 dark:bg-[#070b08] border border-zinc-200 dark:border-emerald-500/30 p-1.5 shadow-sm flex-shrink-0 transition-transform hover:scale-105 ${iconSize}`}>
+      <div className={`relative flex items-center justify-center overflow-hidden rounded-xl bg-zinc-950 dark:bg-[#070b08] border border-zinc-200 dark:border-emerald-500/30 p-1 sm:p-1.5 shadow-sm flex-shrink-0 transition-transform hover:scale-105 ${iconSize}`}>
         <svg
           viewBox="0 0 32 32"
           fill="none"
@@ -54,11 +54,11 @@ export const BrandLogo: React.FC<BrandLogoProps> = ({
       </div>
 
       {showText && (
-        <div className="flex items-center gap-1.5">
-          <span className={`font-black tracking-tight text-zinc-900 dark:text-white ${textSize}`}>
+        <div className="flex items-center gap-1 min-w-0">
+          <span className={`font-black tracking-tight text-zinc-900 dark:text-white ${textSize} whitespace-nowrap`}>
             Founders<span className="text-emerald-600 dark:text-emerald-400">RankBoard</span>
           </span>
-          <span className="hidden sm:inline-flex items-center rounded-md bg-emerald-500/10 px-1.5 py-0.5 text-[9px] font-bold text-emerald-700 dark:text-emerald-400 border border-emerald-500/20 uppercase tracking-wider">
+          <span className="hidden md:inline-flex items-center rounded-md bg-emerald-500/10 px-1.5 py-0.5 text-[9px] font-bold text-emerald-700 dark:text-emerald-400 border border-emerald-500/20 uppercase tracking-wider">
             .com
           </span>
         </div>

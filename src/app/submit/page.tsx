@@ -269,7 +269,7 @@ function SubmitContent() {
           {/* Domain Input */}
           <div className="relative">
             <label className="block text-[11px] font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400 mb-1.5 ml-1">
-              Website URL or Domain *
+              Website URL, Domain, or YouTube Channel *
             </label>
             <div className="relative flex items-center">
               <div className="absolute left-3 z-10 flex h-6 w-6 items-center justify-center overflow-hidden rounded-md bg-zinc-100 dark:bg-[#111712]">
@@ -287,7 +287,7 @@ function SubmitContent() {
               <input
                 type="text"
                 autoFocus={!urlDomain}
-                placeholder="startup.com"
+                placeholder="e.g. yoursite.com or youtube.com/@channel"
                 value={domain}
                 onChange={(e) => !urlDomain && setDomain(e.target.value)}
                 readOnly={!!urlDomain}

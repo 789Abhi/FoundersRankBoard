@@ -18,21 +18,23 @@ export default function AboutPage() {
         <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-3 sm:px-6">
           <Link
             href="/"
-            className="flex items-center gap-2 text-xs font-semibold text-zinc-600 hover:text-emerald-600 dark:text-zinc-400 dark:hover:text-emerald-400 transition"
+            className="flex items-center gap-1.5 text-xs font-semibold text-zinc-600 hover:text-emerald-600 dark:text-zinc-400 dark:hover:text-emerald-400 transition whitespace-nowrap flex-shrink-0"
           >
             <ArrowLeft className="h-4 w-4" />
-            <span>Back to Leaderboard</span>
+            <span className="hidden sm:inline">Back to Leaderboard</span>
+            <span className="sm:hidden">Back</span>
           </Link>
 
-          <Link href="/" className="cursor-pointer">
+          <Link href="/" className="cursor-pointer flex-shrink-0">
             <BrandLogo size="sm" />
           </Link>
 
           <Link
             href="/"
-            className="rounded-full bg-emerald-500 hover:bg-emerald-400 px-4 py-1.5 text-xs font-bold text-zinc-950 transition"
+            className="rounded-full bg-emerald-500 hover:bg-emerald-400 px-3 sm:px-4 py-1.5 text-xs font-bold text-zinc-950 transition whitespace-nowrap flex-shrink-0"
           >
-            List Domain
+            <span className="hidden sm:inline">List Domain</span>
+            <span className="sm:hidden">+ List</span>
           </Link>
         </div>
       </header>

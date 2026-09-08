@@ -50,6 +50,22 @@ export const CleanHero: React.FC<CleanHeroProps> = ({
 
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  // Rotating placeholder showcasing websites and YouTube handles
+  const placeholders = [
+    "Enter website: e.g. yoursite.com",
+    "Enter YouTube: e.g. youtube.com/@channel",
+    "Enter YouTube handle: e.g. @mkbhd",
+    "Enter startup: e.g. saasproduct.io",
+  ];
+  const [placeholderIndex, setPlaceholderIndex] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setPlaceholderIndex((prev) => (prev + 1) % placeholders.length);
+    }, 2800);
+    return () => clearInterval(interval);
+  }, [placeholders.length]);
+
   // Auto-detect domain, favicon, and real website title/description
   useEffect(() => {
     const cleaned = cleanDomain(domainInput);
@@ -192,11 +208,11 @@ export const CleanHero: React.FC<CleanHeroProps> = ({
       </div>
 
       {/* High-Density Quick Bid Bar */}
-      <div className="mt-4 rounded-2xl sm:rounded-3xl border border-zinc-200 dark:border-[#1e3023] bg-white dark:bg-[#0c140f] p-3 sm:p-3.5 shadow-xl text-left max-w-3xl mx-auto">
-        <form onSubmit={handleSubmit} className="space-y-2">
-          <div className="flex flex-col sm:flex-row items-center gap-2">
-            {/* Domain URL Input with Favicon or HD Globe */}
-            <div className="relative flex-1 w-full">
+      <div className="mt-4 rounded-2xl sm:rounded-3xl border border-zinc-200 dark:border-[#1e3023] bg-white dark:bg-[#0c140f] p-3 sm:p-4 shadow-xl text-left max-w-3xl mx-auto">
+        <form onSubmit={handleSubmit} className="space-y-2.5">
+          <div className="flex flex-col lg:flex-row items-stretch lg:items-center gap-2 sm:gap-2.5">
+            {/* Domain URL Input with Favicon or HD Globe (Full width on mobile/tablet, flex-1 on desktop) */}
+            <div className="relative flex-1 w-full min-w-0">
               <div className="absolute left-3 top-1/2 -translate-y-1/2 flex items-center justify-center h-5 w-5">
                 {isFetchingMeta ? (
                   <Loader2 className="h-4 w-4 text-emerald-500 animate-spin" />
@@ -215,100 +231,106 @@ export const CleanHero: React.FC<CleanHeroProps> = ({
 
               <input
                 type="text"
-                placeholder="Enter domain: e.g. yoursite.com"
+                placeholder={placeholders[placeholderIndex]}
                 value={domainInput}
                 onChange={(e) => setDomainInput(e.target.value)}
-                className="w-full rounded-xl border border-zinc-200 dark:border-[#223526] bg-zinc-50 dark:bg-[#070b08] pl-9 pr-3 py-2 text-xs sm:text-sm text-zinc-900 dark:text-white placeholder-zinc-400 dark:placeholder-zinc-500 focus:border-emerald-500 focus:outline-none"
+                className="w-full rounded-xl border border-zinc-200 dark:border-[#223526] bg-zinc-50 dark:bg-[#070b08] pl-9 pr-3 py-2 sm:py-2.5 text-xs sm:text-sm text-zinc-900 dark:text-white placeholder-zinc-400 dark:placeholder-zinc-500 focus:border-emerald-500 focus:outline-none transition-all"
               />
             </div>
 
-            {/* Custom Category Dropdown */}
-            <div className="relative w-full sm:w-56 flex-shrink-0">
-              <button
-                type="button"
-                onClick={() => setIsCategoryOpen(!isCategoryOpen)}
-                className="w-full flex items-center justify-between rounded-xl border border-zinc-200 dark:border-[#223526] bg-zinc-50 dark:bg-[#070b08] px-3 py-2 text-xs font-medium text-zinc-800 dark:text-zinc-200 hover:border-emerald-500/50"
-              >
-                <span className="truncate text-left flex-1 mr-2">{category}</span>
-                <ChevronDown className={`h-3.5 w-3.5 flex-shrink-0 text-zinc-400 dark:text-zinc-500 transition-transform ${isCategoryOpen ? "rotate-180" : ""}`} />
-              </button>
-
-              {isCategoryOpen && (
-                <div className="absolute top-full left-0 mt-1 min-w-full w-max rounded-xl border border-zinc-200 dark:border-[#223526] bg-white dark:bg-[#0a110d] py-1 shadow-2xl z-30 max-h-52 overflow-y-auto">
-                  {CATEGORIES.filter((c) => c.name !== "All").map((c) => (
-                    <div
-                      key={c.name}
-                      onClick={() => {
-                        setCategory(c.name);
-                        setIsCategoryOpen(false);
-                      }}
-                      className={`px-3 py-1.5 text-xs cursor-pointer whitespace-nowrap ${
-                        category === c.name
-                          ? "bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 font-bold"
-                          : "text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-[#121c15]"
-                      }`}
-                    >
-                      {c.name}
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-
-            {/* Amount with Steppers */}
-            <div className="relative w-full sm:w-32 flex-shrink-0">
-              <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-xs font-bold text-emerald-600 dark:text-emerald-400">
-                $
-              </span>
-              <input
-                type="number"
-                min={5}
-                step={1}
-                value={amount}
-                onChange={(e) => handleAmountChange(Number(e.target.value))}
-                className="w-full rounded-xl border border-zinc-200 dark:border-[#223526] bg-zinc-50 dark:bg-[#070b08] pl-6 pr-6 py-2 text-xs sm:text-sm font-bold text-zinc-900 dark:text-white focus:border-emerald-500 focus:outline-none"
-              />
-              <div className="absolute right-1.5 top-1/2 -translate-y-1/2 flex flex-col">
+            {/* Actions toolbar: neatly structured on mobile & tablet, inline on desktop */}
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full lg:w-auto">
+              {/* Custom Category Dropdown */}
+              <div className="relative w-full sm:w-52 md:w-56 flex-1 sm:flex-initial flex-shrink-0">
                 <button
                   type="button"
-                  onClick={() => handleAmountChange(amount + 5)}
-                  className="text-zinc-400 hover:text-emerald-500 leading-none px-1"
+                  onClick={() => setIsCategoryOpen(!isCategoryOpen)}
+                  className="w-full flex items-center justify-between rounded-xl border border-zinc-200 dark:border-[#223526] bg-zinc-50 dark:bg-[#070b08] px-3 py-2 sm:py-2.5 text-xs font-medium text-zinc-800 dark:text-zinc-200 hover:border-emerald-500/50"
                 >
-                  <Plus className="h-2.5 w-2.5" />
+                  <span className="truncate text-left flex-1 mr-2">{category}</span>
+                  <ChevronDown className={`h-3.5 w-3.5 flex-shrink-0 text-zinc-400 dark:text-zinc-500 transition-transform ${isCategoryOpen ? "rotate-180" : ""}`} />
                 </button>
+
+                {isCategoryOpen && (
+                  <div className="absolute top-full left-0 mt-1 min-w-full w-max rounded-xl border border-zinc-200 dark:border-[#223526] bg-white dark:bg-[#0a110d] py-1 shadow-2xl z-30 max-h-52 overflow-y-auto">
+                    {CATEGORIES.filter((c) => c.name !== "All").map((c) => (
+                      <div
+                        key={c.name}
+                        onClick={() => {
+                          setCategory(c.name);
+                          setIsCategoryOpen(false);
+                        }}
+                        className={`px-3 py-1.5 text-xs cursor-pointer whitespace-nowrap ${
+                          category === c.name
+                            ? "bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 font-bold"
+                            : "text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-[#121c15]"
+                        }`}
+                      >
+                        {c.name}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* Amount Steppers & Rank Up Button */}
+              <div className="flex items-center gap-2 w-full sm:w-auto">
+                {/* Amount with Steppers */}
+                <div className="relative flex-1 sm:w-28 md:w-32 flex-shrink-0">
+                  <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-xs font-bold text-emerald-600 dark:text-emerald-400">
+                    $
+                  </span>
+                  <input
+                    type="number"
+                    min={5}
+                    step={1}
+                    value={amount}
+                    onChange={(e) => handleAmountChange(Number(e.target.value))}
+                    className="w-full rounded-xl border border-zinc-200 dark:border-[#223526] bg-zinc-50 dark:bg-[#070b08] pl-6 pr-6 py-2 sm:py-2.5 text-xs sm:text-sm font-bold text-zinc-900 dark:text-white focus:border-emerald-500 focus:outline-none"
+                  />
+                  <div className="absolute right-1.5 top-1/2 -translate-y-1/2 flex flex-col">
+                    <button
+                      type="button"
+                      onClick={() => handleAmountChange(amount + 5)}
+                      className="text-zinc-400 hover:text-emerald-500 leading-none px-1"
+                    >
+                      <Plus className="h-2.5 w-2.5" />
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleAmountChange(amount - 5)}
+                      className="text-zinc-400 hover:text-rose-500 leading-none px-1"
+                    >
+                      <Minus className="h-2.5 w-2.5" />
+                    </button>
+                  </div>
+                </div>
+
+                {/* Rank Up CTA */}
                 <button
-                  type="button"
-                  onClick={() => handleAmountChange(amount - 5)}
-                  className="text-zinc-400 hover:text-rose-500 leading-none px-1"
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-1.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 active:scale-95 px-4 sm:px-5 py-2 sm:py-2.5 text-xs font-bold text-zinc-950 transition shadow-md shadow-emerald-500/25 whitespace-nowrap disabled:opacity-70 disabled:cursor-not-allowed"
                 >
-                  <Minus className="h-2.5 w-2.5" />
+                  {isSubmitting ? (
+                    <>
+                      <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                      <span>Loading...</span>
+                    </>
+                  ) : (
+                    <>
+                      <span>Rank Up</span>
+                      <ArrowRight className="h-3.5 w-3.5 stroke-[3]" />
+                    </>
+                  )}
                 </button>
               </div>
             </div>
-
-            {/* Rank Up CTA */}
-            <button
-              type="submit"
-              disabled={isSubmitting}
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-1.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 active:scale-95 px-5 py-2 text-xs font-bold text-zinc-950 transition shadow-md shadow-emerald-500/25 whitespace-nowrap disabled:opacity-70 disabled:cursor-not-allowed"
-            >
-              {isSubmitting ? (
-                <>
-                  <Loader2 className="h-3.5 w-3.5 animate-spin" />
-                  <span>Loading...</span>
-                </>
-              ) : (
-                <>
-                  <span>Rank Up</span>
-                  <ArrowRight className="h-3.5 w-3.5 stroke-[3]" />
-                </>
-              )}
-            </button>
           </div>
 
           {/* Compact Prediction & Outbid Hint */}
-          <div className="flex flex-wrap items-center justify-between gap-1 text-[11px] pt-1.5 border-t border-zinc-100 dark:border-[#16241a]">
-            <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center justify-between gap-1.5 text-[10px] sm:text-[11px] pt-2 border-t border-zinc-100 dark:border-[#16241a]">
+            <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
               <span className="text-zinc-500 dark:text-zinc-400">Will rank:</span>
               <span className="text-emerald-600 dark:text-emerald-400 font-bold">
                 🏆 #{rankPrediction.categoryRank} in {category}
@@ -334,19 +356,19 @@ export const CleanHero: React.FC<CleanHeroProps> = ({
           </div>
         </form>
 
-        {error && <p className="mt-1 text-xs text-rose-500">{error}</p>}
+        {error && <p className="mt-1.5 text-xs text-rose-500">{error}</p>}
       </div>
 
       {/* Category Pills & Search Row right above listings */}
-      <div className="mt-4 flex flex-col sm:flex-row items-center justify-between gap-2 max-w-4xl mx-auto">
-        <div className="flex items-center gap-1.5 overflow-x-auto pb-1 max-w-full scrollbar-none">
+      <div className="mt-4 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2 max-w-4xl mx-auto">
+        <div className="flex items-center gap-1.5 overflow-x-auto pb-1.5 w-full sm:flex-1 scrollbar-none">
           {CATEGORIES.map((cat) => {
             const isActive = selectedCategory === cat.name;
             return (
               <button
                 key={cat.name}
                 onClick={() => onSelectCategory(cat.name)}
-                className={`rounded-full px-3 py-1 text-xs font-semibold whitespace-nowrap transition-all ${
+                className={`rounded-full px-3 py-1 text-xs font-semibold whitespace-nowrap transition-all flex-shrink-0 ${
                   isActive
                     ? "bg-emerald-500 text-zinc-950 shadow-sm"
                     : "bg-white dark:bg-[#0c140f] text-zinc-600 dark:text-zinc-400 border border-zinc-200 dark:border-[#19271c] hover:border-zinc-300 dark:hover:text-zinc-200"
@@ -358,14 +380,14 @@ export const CleanHero: React.FC<CleanHeroProps> = ({
           })}
         </div>
 
-        <div className="relative w-full sm:w-52 flex-shrink-0">
+        <div className="relative w-full sm:w-48 md:w-56 flex-shrink-0">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-zinc-400 dark:text-zinc-500" />
           <input
             type="text"
             placeholder="Search domain..."
             value={searchQuery}
             onChange={(e) => onSearchChange(e.target.value)}
-            className="w-full rounded-full border border-zinc-200 dark:border-[#19271c] bg-white dark:bg-[#0c140f] pl-8 pr-3 py-1 text-xs text-zinc-900 dark:text-white placeholder-zinc-400 dark:placeholder-zinc-500 focus:border-emerald-500 focus:outline-none"
+            className="w-full rounded-full border border-zinc-200 dark:border-[#19271c] bg-white dark:bg-[#0c140f] pl-8 pr-3 py-1.5 text-xs text-zinc-900 dark:text-white placeholder-zinc-400 dark:placeholder-zinc-500 focus:border-emerald-500 focus:outline-none"
           />
         </div>
       </div>

@@ -54,10 +54,40 @@ export const metadata: Metadata = {
       "max-snippet": -1,
     },
   },
+  alternates: {
+    canonical: "https://foundersrankboard.com",
+  },
+  verification: {
+    google: "google2c583da9c5172027",
+  },
   icons: {
     icon: "/icon.svg",
     apple: "/icon.svg",
   },
+};
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": "https://foundersrankboard.com/#website",
+      "url": "https://foundersrankboard.com",
+      "name": "FoundersRankBoard",
+      "description": "The Pay-to-Rank Domain Leaderboard for founders and startups.",
+      "publisher": {
+        "@id": "https://foundersrankboard.com/#organization"
+      }
+    },
+    {
+      "@type": "Organization",
+      "@id": "https://foundersrankboard.com/#organization",
+      "name": "FoundersRankBoard",
+      "url": "https://foundersrankboard.com",
+      "logo": "https://foundersrankboard.com/icon.svg",
+      "sameAs": []
+    }
+  ]
 };
 
 export default function RootLayout({
@@ -73,6 +103,10 @@ export default function RootLayout({
     >
       <head>
         <Script src="https://checkout.razorpay.com/v1/checkout.js" strategy="beforeInteractive" />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
       </head>
       <body className="min-h-screen bg-[#f8faf9] text-zinc-900 dark:bg-[#060907] dark:text-zinc-100 antialiased selection:bg-emerald-500 selection:text-zinc-950 transition-colors duration-200">
         <ThemeProvider>

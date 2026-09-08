@@ -51,10 +51,11 @@ export default function FAQPage() {
         <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-3 sm:px-6">
           <Link
             href="/"
-            className="flex items-center gap-2 text-xs font-semibold text-zinc-600 hover:text-emerald-600 dark:text-zinc-400 dark:hover:text-emerald-400 transition"
+            className="flex items-center gap-1.5 text-xs font-semibold text-zinc-600 hover:text-emerald-600 dark:text-zinc-400 dark:hover:text-emerald-400 transition whitespace-nowrap flex-shrink-0"
           >
             <ArrowLeft className="h-4 w-4" />
-            <span>Back to Leaderboard</span>
+            <span className="hidden sm:inline">Back to Leaderboard</span>
+            <span className="sm:hidden">Back</span>
           </Link>
           <BrandLogo size="sm" />
         </div>

@@ -62,8 +62,8 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({
   return (
     <section className="mx-auto max-w-4xl px-4 sm:px-6 pt-1">
       {/* Header bar */}
-      <div className="flex items-center justify-between py-2 border-b border-zinc-200/80 dark:border-[#142017] mb-3 text-xs text-zinc-500 dark:text-zinc-400">
-        <div className="flex items-center gap-1.5 font-semibold text-zinc-900 dark:text-white">
+      <div className="flex flex-wrap items-center justify-between gap-2 py-2 border-b border-zinc-200/80 dark:border-[#142017] mb-3 text-xs text-zinc-500 dark:text-zinc-400">
+        <div className="flex flex-wrap items-center gap-1.5 font-semibold text-zinc-900 dark:text-white">
           <Trophy className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
           <span>
             {selectedCategory === "All" ? "Global Leaderboard" : `${selectedCategory} Board`}
@@ -72,7 +72,7 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({
             {filteredListings.length} {filteredListings.length === 1 ? "domain" : "domains"}
           </span>
         </div>
-        <span className="text-[11px] text-zinc-500">Sorted by cumulative USD paid</span>
+        <span className="text-[10px] sm:text-[11px] text-zinc-500 whitespace-nowrap">Sorted by cumulative USD paid</span>
       </div>
 
       {/* Cards List */}
