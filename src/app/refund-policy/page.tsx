@@ -1,6 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
+import { Footer } from '../../components/Footer';
 
 export default function RefundPolicyPage() {
   return (
@@ -49,10 +50,11 @@ export default function RefundPolicyPage() {
 
           <h2 className="text-2xl font-bold text-zinc-900 dark:text-white mt-8 mb-4">5. Contact Us</h2>
           <p>
-            If you believe you are eligible for a refund based on the criteria above, please contact us at <strong>support@bidtorankup.com</strong> within 7 days of your transaction.
+            If you believe you are eligible for a refund based on the criteria above, please contact us at <strong>bidtorankup@gmail.com</strong> within 7 days of your transaction.
           </p>
         </div>
       </div>
+      <Footer />
     </div>
   );
 }

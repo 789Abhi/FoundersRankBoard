@@ -1,6 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
+import { Footer } from '../../components/Footer';
 
 export default function ContactPage() {
   return (
@@ -26,26 +27,26 @@ export default function ContactPage() {
             <div className="space-y-4">
               <div>
                 <h3 className="font-semibold text-zinc-900 dark:text-zinc-200">Email Address</h3>
-                <p>support@bidtorankup.com</p>
+                <p>bidtorankup@gmail.com</p>
                 <p className="text-sm text-zinc-500 mt-1">We aim to respond to all inquiries within 24-48 business hours.</p>
               </div>
 
               <div>
                 <h3 className="font-semibold text-zinc-900 dark:text-zinc-200">Business Address</h3>
                 <p>BidToRankUp</p>
-                <p>[Your Name / Company Name]</p>
-                <p>[Your Full Address, City, State, PIN Code]</p>
+                <p>Akashaya Nilaya ,Alape,padil post,Mangalore, Karnataka - 575007</p>
                 <p>India</p>
               </div>
               
               <div>
                 <h3 className="font-semibold text-zinc-900 dark:text-zinc-200">Phone Number</h3>
-                <p>[Your Phone Number]</p>
+                <p>+91 8792816959</p>
               </div>
             </div>
           </div>
         </div>
       </div>
+      <Footer />
     </div>
   );
 }

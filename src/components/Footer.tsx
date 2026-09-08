@@ -4,11 +4,7 @@ import React from "react";
 import { RefreshCw } from "lucide-react";
 import { BrandLogo } from "./BrandLogo";
 
-interface FooterProps {
-  onResetData: () => void;
-}
-
-export const Footer: React.FC<FooterProps> = ({ onResetData }) => {
+export const Footer: React.FC = () => {
   return (
     <footer className="border-t border-zinc-200/80 dark:border-zinc-800/80 bg-white dark:bg-zinc-950 py-10 transition-colors">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">

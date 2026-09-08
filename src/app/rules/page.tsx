@@ -2,6 +2,7 @@ import React from "react";
 import Link from "next/link";
 import { ArrowLeft, BookOpen, Trophy } from "lucide-react";
 import { BrandLogo } from "../../components/BrandLogo";
+import { Footer } from "../../components/Footer";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -139,16 +140,7 @@ export default function RulesPage() {
       </div>
 
       {/* Footer */}
-      <footer className="border-t border-zinc-200/80 dark:border-[#121c15] py-8 text-center text-xs text-zinc-500">
-        <div className="mx-auto max-w-4xl px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
-          <span>BidToRankUp · All amounts in USD ($)</span>
-          <div className="flex gap-4">
-            <Link href="/about" className="hover:text-emerald-600 dark:hover:text-emerald-400 transition">About Us</Link>
-            <Link href="/privacy" className="hover:text-emerald-600 dark:hover:text-emerald-400 transition">Privacy</Link>
-            <Link href="/" className="hover:text-emerald-600 dark:hover:text-emerald-400 transition">Leaderboard</Link>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </main>
   );
 }

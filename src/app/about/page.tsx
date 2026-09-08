@@ -2,6 +2,7 @@ import React from "react";
 import Link from "next/link";
 import { ArrowLeft, Target, Globe, Zap, ShieldCheck, TrendingUp } from "lucide-react";
 import { BrandLogo } from "../../components/BrandLogo";
+import { Footer } from "../../components/Footer";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -78,7 +79,7 @@ export default function AboutPage() {
                 <span>Cumulative Bidding</span>
               </div>
               <p className="text-xs text-zinc-600 dark:text-zinc-400 leading-relaxed">
-                Every rupee you pay adds up. If you start with $5 and add $500 later, your cumulative score is $600, permanently preserving your rank equity.
+                Every dollar you bid adds up. If you start with $5 and add $500 later, your cumulative score becomes $505, permanently preserving your rank equity.
               </p>
             </div>
 
@@ -103,9 +104,9 @@ export default function AboutPage() {
             </div>
           </div>
 
-          <h2 className="text-lg font-bold text-zinc-900 dark:text-white pt-4">Priced in Indian Rupees ($)</h2>
+          <h2 className="text-lg font-bold text-zinc-900 dark:text-white pt-4">Global Leaderboard, Local Payments</h2>
           <p>
-            While most international directories price in USD and only accept Stripe or PayPal, BidToRankUp natively supports Indian Rupees ($) with UPI (Google Pay, PhonePe, Paytm, BHIM) alongside international debit/credit cards, empowering the booming Indian startup and tech ecosystem.
+            While the leaderboard rankings are priced globally in USD ($), BidToRankUp natively supports seamless checkout in Indian Rupees (₹). You can easily pay using UPI (Google Pay, PhonePe, Paytm, BHIM) alongside standard debit/credit cards, removing the friction typically associated with global ad platforms.
           </p>
 
           {/* CTA Box */}
@@ -127,16 +128,7 @@ export default function AboutPage() {
       </div>
 
       {/* Footer */}
-      <footer className="border-t border-zinc-200/80 dark:border-[#121c15] py-8 text-center text-xs text-zinc-500">
-        <div className="mx-auto max-w-4xl px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
-          <span>BidToRankUp · All amounts in USD ($)</span>
-          <div className="flex gap-4">
-            <Link href="/rules" className="hover:text-emerald-600 dark:hover:text-emerald-400 transition">Rules</Link>
-            <Link href="/privacy" className="hover:text-emerald-600 dark:hover:text-emerald-400 transition">Privacy</Link>
-            <Link href="/" className="hover:text-emerald-600 dark:hover:text-emerald-400 transition">Leaderboard</Link>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </main>
   );
 }

@@ -32,13 +32,14 @@ export async function POST(req: Request) {
       amount: unitAmountPaise,
       currency: "INR",
       receipt: `rcpt_${Date.now()}_${domain.replace(/[^a-zA-Z0-9]/g, "").slice(0, 20)}`,
+      payment_capture: 1, // Auto-capture the payment immediately
       notes: {
-        domain,
-        name: name || "",
-        tagline: tagline || "",
-        category,
-        amountUSD: amountUSD.toString(),
-        favicon: favicon || "",
+        domain: domain.slice(0, 255),
+        name: (name || "").slice(0, 255),
+        tagline: (tagline || "").slice(0, 255),
+        category: (category || "").slice(0, 255),
+        amountUSD: amountUSD.toString().slice(0, 255),
+        favicon: (favicon || "").slice(0, 255),
       },
     };
 

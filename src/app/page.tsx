@@ -16,11 +16,17 @@ import { CleanHero } from "../components/CleanHero";
 import { Leaderboard } from "../components/Leaderboard";
 import { BigBottomRevenue } from "../components/BigBottomRevenue";
 import { SplashScreen } from "../components/SplashScreen";
+import { Footer } from "../components/Footer";
 import { formatUSD } from "../lib/utils";
 import { Trophy, RefreshCw } from "lucide-react";
 
 export default function Home() {
-  const [showSplash, setShowSplash] = useState(true);
+  const [showSplash, setShowSplash] = useState(() => {
+    if (typeof window !== "undefined") {
+      return !sessionStorage.getItem("splash_shown");
+    }
+    return true;
+  });
   const [listings, setListings] = useState<WebsiteListing[]>([]);
   const [stats, setStats] = useState<LeaderboardStats>({
     totalRevenueUSD: 0,
@@ -175,7 +181,10 @@ export default function Home() {
     <>
       {/* Beautiful splash screen — shown on first visit, fades out automatically */}
       {showSplash && (
-        <SplashScreen onComplete={() => setShowSplash(false)} />
+        <SplashScreen onComplete={() => {
+          setShowSplash(false);
+          sessionStorage.setItem("splash_shown", "true");
+        }} />
       )}
 
       <main className="min-h-screen bg-[#f8faf9] text-zinc-800 dark:bg-[#060907] dark:text-zinc-200 bg-mesh-pattern relative selection:bg-emerald-500 selection:text-black transition-colors duration-200">
@@ -211,37 +220,7 @@ export default function Home() {
       />
 
       {/* Footer */}
-      <footer className="border-t border-zinc-200/80 dark:border-[#121c15] bg-white dark:bg-[#040705] py-10 text-xs text-zinc-500 text-center transition-colors">
-        <div className="mx-auto max-w-5xl px-4 flex flex-col md:flex-row items-center justify-between gap-6">
-          <div className="flex flex-col md:items-start items-center gap-2">
-            <div className="flex items-center gap-2">
-              <span className="h-2 w-2 rounded-full bg-emerald-500"></span>
-              <span className="font-bold text-zinc-900 dark:text-zinc-200">BidToRankUp</span>
-              <span>·</span>
-              <span>&copy; {new Date().getFullYear()}</span>
-            </div>
-            <span className="text-[11px] text-zinc-400">The Pay-to-Rank Domain Board • Secured by Razorpay</span>
-          </div>
-
-          <div className="flex flex-wrap justify-center items-center gap-4 text-zinc-600 dark:text-zinc-400 font-medium">
-            <Link href="/about" className="hover:text-emerald-600 dark:hover:text-emerald-400 transition">
-              About Us
-            </Link>
-            <Link href="/contact" className="hover:text-emerald-600 dark:hover:text-emerald-400 transition">
-              Contact Us
-            </Link>
-            <Link href="/rules" className="hover:text-emerald-600 dark:hover:text-emerald-400 transition">
-              Terms & Conditions
-            </Link>
-            <Link href="/privacy" className="hover:text-emerald-600 dark:hover:text-emerald-400 transition">
-              Privacy Policy
-            </Link>
-            <Link href="/refund-policy" className="hover:text-emerald-600 dark:hover:text-emerald-400 transition">
-              Cancellation & Refund Policy
-            </Link>
-          </div>
-        </div>
-      </footer>
+      <Footer />
 
       {/* Real-time notification toast */}
       {toastMessage && (

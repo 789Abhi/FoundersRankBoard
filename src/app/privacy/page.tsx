@@ -2,6 +2,7 @@ import React from "react";
 import Link from "next/link";
 import { ArrowLeft, ShieldCheck, Lock, Eye, Database, Server } from "lucide-react";
 import { BrandLogo } from "../../components/BrandLogo";
+import { Footer } from "../../components/Footer";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -120,16 +121,7 @@ export default function PrivacyPage() {
       </div>
 
       {/* Footer */}
-      <footer className="border-t border-zinc-200/80 dark:border-[#121c15] py-8 text-center text-xs text-zinc-500">
-        <div className="mx-auto max-w-4xl px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
-          <span>BidToRankUp · All amounts in USD ($)</span>
-          <div className="flex gap-4">
-            <Link href="/about" className="hover:text-emerald-600 dark:hover:text-emerald-400 transition">About Us</Link>
-            <Link href="/rules" className="hover:text-emerald-600 dark:hover:text-emerald-400 transition">Rules</Link>
-            <Link href="/" className="hover:text-emerald-600 dark:hover:text-emerald-400 transition">Leaderboard</Link>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </main>
   );
 }
