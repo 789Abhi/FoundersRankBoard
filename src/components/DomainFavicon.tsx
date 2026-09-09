@@ -137,7 +137,7 @@ export const DomainFavicon: React.FC<DomainFaviconProps> = ({
 
   return (
     <div
-      className={`relative flex items-center justify-center overflow-hidden border border-zinc-200/80 dark:border-[#223326] bg-white dark:bg-[#0b120d] p-1.5 shadow-sm transition-all ${containerSize} ${className}`}
+      className={`relative flex items-center justify-center overflow-hidden border border-zinc-200/80 dark:border-[#223326] bg-white dark:bg-[#0b120d]  shadow-sm transition-all ${containerSize} ${className}`}
       title={name || domain}
     >
       {/* While loading, show HD Globe smoothly in background */}
@@ -154,7 +154,7 @@ export const DomainFavicon: React.FC<DomainFaviconProps> = ({
           key={currentSrc}
           src={currentSrc || undefined}
           alt={name || domain}
-          className={`${imgSize} object-contain transition-opacity duration-200 ${
+          className={` object-contain w-full h-full transition-opacity duration-200 ${
             loadState === "loaded" ? "opacity-100 scale-100" : "opacity-0 scale-95"
           }`}
           onLoad={() => setLoadState("loaded")}

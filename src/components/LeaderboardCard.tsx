@@ -198,16 +198,6 @@ const LeaderboardCardInner: React.FC<LeaderboardCardProps> = ({
 
               <span>·</span>
 
-              {/* Registered Date Gauge */}
-              <span
-                title={`Registered on: ${new Date(listing.createdAt).toLocaleString()}`}
-                className="hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors"
-              >
-                Registered: {formatTimeAgo(listing.createdAt)}
-              </span>
-
-              <span>·</span>
-
               {/* Domain Link */}
               <a
                 href={listing.url}
