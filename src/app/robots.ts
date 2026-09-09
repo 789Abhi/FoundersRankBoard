@@ -8,22 +8,22 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: "*",
         allow: "/",
-        disallow: ["/api/"],
+        disallow: ["/api/razorpay/"],
       },
       {
         userAgent: "Googlebot",
         allow: "/",
-        disallow: ["/api/"],
+        disallow: ["/api/razorpay/"],
       },
       {
         userAgent: "Bingbot",
         allow: "/",
-        disallow: ["/api/"],
+        disallow: ["/api/razorpay/"],
       },
       {
         userAgent: "Applebot",
         allow: "/",
-        disallow: ["/api/"],
+        disallow: ["/api/razorpay/"],
       },
     ],
     sitemap: `${baseUrl}/sitemap.xml`,

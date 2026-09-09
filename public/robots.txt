@@ -1,18 +1,18 @@
 User-agent: *
 Allow: /
-Disallow: /api/
+Disallow: /api/razorpay/
 
 User-agent: Googlebot
 Allow: /
-Disallow: /api/
+Disallow: /api/razorpay/
 
 User-agent: Bingbot
 Allow: /
-Disallow: /api/
+Disallow: /api/razorpay/
 
 User-agent: Applebot
 Allow: /
-Disallow: /api/
+Disallow: /api/razorpay/
 
 Sitemap: https://foundersrankboard.com/sitemap.xml
 Host: https://foundersrankboard.com
