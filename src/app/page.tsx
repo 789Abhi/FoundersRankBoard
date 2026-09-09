@@ -9,8 +9,10 @@ import {
   getListingsFromCache,
   calculateStats, 
   trackOutboundClick, 
-  registerActiveSession
+  registerActiveSession,
+  recordAndSyncGlobalVisitors
 } from "../lib/storage";
+import { supabase } from "../lib/supabase";
 import { Navbar } from "../components/Navbar";
 import { CleanHero } from "../components/CleanHero";
 import { Leaderboard } from "../components/Leaderboard";
@@ -93,8 +95,34 @@ export default function Home() {
   };
 
   useEffect(() => {
-    const cleanupSession = registerActiveSession();
+    const cleanupLocalSession = registerActiveSession();
     let isMounted = true;
+
+    // Track live global online users via Supabase Realtime Presence
+    const presenceChannel = supabase.channel("frb_live_presence", {
+      config: {
+        presence: {
+          key: typeof window !== "undefined" ? (sessionStorage.getItem("frb_presence_key") || (() => {
+            const k = "usr_" + Math.random().toString(36).substring(2, 9);
+            sessionStorage.setItem("frb_presence_key", k);
+            return k;
+          })()) : "user"
+        }
+      }
+    });
+
+    presenceChannel
+      .on("presence", { event: "sync" }, () => {
+        if (!isMounted) return;
+        const state = presenceChannel.presenceState();
+        const liveCount = Math.max(1, Object.keys(state).length);
+        setStats((prev) => ({ ...prev, onlineCount: liveCount }));
+      })
+      .subscribe(async (status) => {
+        if (status === "SUBSCRIBED") {
+          await presenceChannel.track({ online_at: new Date().toISOString() });
+        }
+      });
 
     async function loadData() {
       // 1. Show cached data INSTANTLY (zero wait) so user sees content immediately
@@ -113,6 +141,13 @@ export default function Home() {
         setStats(calculateStats(fresh));
       }
       setIsLoaded(true);
+
+      // 3. Sync global cumulative visitor counter from server
+      const globalVisitors = await recordAndSyncGlobalVisitors();
+      if (isMounted && globalVisitors > 0) {
+        setStats((prev) => ({ ...prev, totalVisitors: globalVisitors }));
+      }
+
       syncLiveWebsiteMeta(fresh.length > 0 ? fresh : cached);
     }
     
@@ -124,14 +159,20 @@ export default function Home() {
       if (!isMounted) return;
       if (data.length > 0) {
         setListings(data);
-        setStats(calculateStats(data));
+        setStats((prev) => {
+          const freshStats = calculateStats(data, prev.totalVisitors);
+          return { ...freshStats, onlineCount: prev.onlineCount };
+        });
       }
     }, 30000);
 
     return () => {
       isMounted = false;
-      cleanupSession();
+      cleanupLocalSession();
       clearInterval(timer);
+      try {
+        presenceChannel.unsubscribe();
+      } catch {}
     };
   }, []);
 

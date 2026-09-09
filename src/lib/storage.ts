@@ -68,7 +68,9 @@ export async function getStoredListings(): Promise<WebsiteListing[]> {
       return readSessionCache() ?? [];
     }
     
-    const mapped = data ? data.map(mapListing) : [];
+    const mapped = data
+      ? data.filter((item: any) => item.domain !== '__frb_system_stats__').map(mapListing)
+      : [];
     writeSessionCache(mapped);
     return mapped;
   } catch (err) {
@@ -185,12 +187,35 @@ export function getRealOnlineCount(): number {
   }
 }
 
-export function calculateStats(listings: WebsiteListing[]): LeaderboardStats {
+export async function recordAndSyncGlobalVisitors(): Promise<number> {
+  if (typeof window === "undefined") return 1;
+  try {
+    const sessionMarked = sessionStorage.getItem("rankmeup_session_recorded");
+    const method = sessionMarked ? "GET" : "POST";
+    if (!sessionMarked) {
+      sessionStorage.setItem("rankmeup_session_recorded", "true");
+    }
+
+    const res = await fetch("/api/stats", { method });
+    if (res.ok) {
+      const data = await res.json();
+      if (typeof data.totalVisitors === "number" && data.totalVisitors > 0) {
+        localStorage.setItem(VISITORS_KEY, data.totalVisitors.toString());
+        return data.totalVisitors;
+      }
+    }
+  } catch {
+    // Fallback to local count if offline
+  }
+  return recordAndGetRealVisitors();
+}
+
+export function calculateStats(listings: WebsiteListing[], overrideVisitors?: number): LeaderboardStats {
   const totalRevenueUSD = listings.reduce((sum, item) => sum + (item.totalPaidUSD || 0), 0);
   const totalClicksDelivered = listings.reduce((sum, item) => sum + (item.clicks || 0), 0);
   const topBidUSD = listings.length > 0 ? Math.max(...listings.map((item) => item.totalPaidUSD || 0)) : 0;
   const onlineCount = getRealOnlineCount();
-  const totalVisitors = recordAndGetRealVisitors();
+  const totalVisitors = overrideVisitors !== undefined ? overrideVisitors : recordAndGetRealVisitors();
 
   return {
     totalRevenueUSD,
