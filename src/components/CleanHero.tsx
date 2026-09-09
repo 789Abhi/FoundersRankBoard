@@ -9,14 +9,79 @@ import {
   ArrowRight, 
   Zap, 
   Search, 
+  X,
   ChevronDown, 
+  ChevronLeft,
+  ChevronRight,
   Sparkles,
   Plus,
   Minus,
   Loader2,
   Rocket,
-  Crown
+  Crown,
+  Bot,
+  Share2,
+  Megaphone,
+  Coins,
+  Code2,
+  Briefcase,
+  ShieldCheck,
+  HeartPulse,
+  Trophy,
+  UserCheck,
+  GraduationCap,
+  Building2,
+  ShoppingCart,
+  Globe2,
+  Gamepad2,
+  Users,
+  CheckSquare,
+  Palette,
+  PenTool,
+  Compass,
+  Video,
+  Mic,
+  TrendingUp,
+  Plane,
+  Home,
+  Newspaper,
+  Layers
 } from "lucide-react";
+
+const CATEGORY_META: Record<
+  string,
+  { icon: React.ElementType; color: string }
+> = {
+  All: { icon: Sparkles, color: "text-emerald-500" },
+  "AI Agents & Infrastructure": { icon: Bot, color: "text-purple-500" },
+  "SEO & AI Visibility": { icon: Search, color: "text-cyan-500" },
+  "Social Media & Creator Tools": { icon: Share2, color: "text-rose-500" },
+  "Marketing & Advertising": { icon: Megaphone, color: "text-amber-500" },
+  "Crypto, Web3 & Investing": { icon: Coins, color: "text-yellow-500" },
+  "Developer Tools": { icon: Code2, color: "text-blue-500" },
+  "Business, Finance & Legal": { icon: Briefcase, color: "text-emerald-500" },
+  "Security, Privacy & Compliance": { icon: ShieldCheck, color: "text-teal-500" },
+  "Health, Fitness & Wellness": { icon: HeartPulse, color: "text-pink-500" },
+  "Leaderboards & Attention Markets": { icon: Trophy, color: "text-amber-400" },
+  "Hiring, Jobs & Careers": { icon: UserCheck, color: "text-indigo-500" },
+  "Education & Learning": { icon: GraduationCap, color: "text-orange-500" },
+  "Agencies, Studios & Services": { icon: Building2, color: "text-sky-500" },
+  "Ecommerce & Retail": { icon: ShoppingCart, color: "text-lime-500" },
+  "Domains & Web Assets": { icon: Globe2, color: "text-emerald-400" },
+  "Games & Entertainment": { icon: Gamepad2, color: "text-violet-500" },
+  "People & Profiles": { icon: Users, color: "text-fuchsia-500" },
+  "Productivity & Personal Tools": { icon: CheckSquare, color: "text-teal-400" },
+  "Design & Creative": { icon: Palette, color: "text-pink-400" },
+  "Writing & Content": { icon: PenTool, color: "text-amber-500" },
+  "Directories, Launch & Discovery": { icon: Compass, color: "text-cyan-400" },
+  "AI Media Generation": { icon: Video, color: "text-indigo-400" },
+  "Audio, Voice & Podcasting": { icon: Mic, color: "text-red-500" },
+  "Sales & Lead Generation": { icon: TrendingUp, color: "text-emerald-400" },
+  "Travel, Local & Lifestyle": { icon: Plane, color: "text-sky-400" },
+  "Real Estate & Property": { icon: Home, color: "text-amber-600" },
+  "Media & News": { icon: Newspaper, color: "text-blue-400" },
+  Other: { icon: Layers, color: "text-zinc-400" },
+};
 
 interface CleanHeroProps {
   listings: WebsiteListing[];
@@ -59,6 +124,27 @@ export const CleanHero: React.FC<CleanHeroProps> = ({
     "Enter YouTube handle: e.g. @mkbhd",
     "Enter startup: e.g. saasproduct.io",
   ];
+
+  const categoryContainerRef = React.useRef<HTMLDivElement>(null);
+
+  const handleCategoryClick = (catName: CategoryType, e: React.MouseEvent<HTMLButtonElement>) => {
+    onSelectCategory(catName);
+    // Smoothly scroll the clicked button into full view within the container
+    e.currentTarget.scrollIntoView({
+      behavior: "smooth",
+      block: "nearest",
+      inline: "center",
+    });
+  };
+
+  const scrollCategories = (direction: "left" | "right") => {
+    if (categoryContainerRef.current) {
+      categoryContainerRef.current.scrollBy({
+        left: direction === "left" ? -220 : 220,
+        behavior: "smooth",
+      });
+    }
+  };
   const [placeholderIndex, setPlaceholderIndex] = useState(0);
 
   useEffect(() => {
@@ -273,35 +359,48 @@ export const CleanHero: React.FC<CleanHeroProps> = ({
             {/* Actions toolbar: neatly structured on mobile & tablet, compact on desktop */}
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full lg:w-auto">
               {/* Custom Category Dropdown - Compact */}
-              <div className="relative w-full sm:w-44 md:w-48 flex-1 sm:flex-initial flex-shrink-0">
+              <div className="relative w-full sm:w-48 md:w-52 flex-1 sm:flex-initial flex-shrink-0">
                 <button
                   type="button"
                   suppressHydrationWarning
                   onClick={() => setIsCategoryOpen(!isCategoryOpen)}
-                  className="w-full flex items-center justify-between rounded-xl border border-zinc-200 dark:border-[#223526] bg-zinc-50 dark:bg-[#070b08] px-3 py-2 sm:py-2.5 text-xs font-medium text-zinc-800 dark:text-zinc-200 hover:border-emerald-500/50"
+                  className="w-full flex items-center justify-between rounded-xl border border-zinc-200 dark:border-[#223526] bg-zinc-50 dark:bg-[#070b08] px-2.5 py-2 sm:py-2.5 text-xs font-medium text-zinc-800 dark:text-zinc-200 hover:border-emerald-500/50 gap-1.5"
                 >
-                  <span className="truncate text-left flex-1 mr-1.5">{category}</span>
+                  <div className="flex items-center gap-1.5 min-w-0 flex-1">
+                    {(() => {
+                      const meta = CATEGORY_META[category] || CATEGORY_META.Other;
+                      const IconComp = meta.icon;
+                      return <IconComp className={`h-3.5 w-3.5 flex-shrink-0 ${meta.color}`} />;
+                    })()}
+                    <span className="truncate text-left">{category}</span>
+                  </div>
                   <ChevronDown className={`h-3.5 w-3.5 flex-shrink-0 text-zinc-400 dark:text-zinc-500 transition-transform ${isCategoryOpen ? "rotate-180" : ""}`} />
                 </button>
 
                 {isCategoryOpen && (
-                  <div className="absolute top-full left-0 mt-1 min-w-full w-max rounded-xl border border-zinc-200 dark:border-[#223526] bg-white dark:bg-[#0a110d] py-1 shadow-2xl z-30 max-h-52 overflow-y-auto">
-                    {CATEGORIES.filter((c) => c.name !== "All").map((c) => (
-                      <div
-                        key={c.name}
-                        onClick={() => {
-                          setCategory(c.name);
-                          setIsCategoryOpen(false);
-                        }}
-                        className={`px-3 py-1.5 text-xs cursor-pointer whitespace-nowrap ${
-                          category === c.name
-                            ? "bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 font-bold"
-                            : "text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-[#121c15]"
-                        }`}
-                      >
-                        {c.name}
-                      </div>
-                    ))}
+                  <div className="absolute top-full left-0 mt-1 min-w-full w-max rounded-xl border border-zinc-200 dark:border-[#223526] bg-white dark:bg-[#0a110d] py-1 shadow-2xl z-30 max-h-56 overflow-y-auto">
+                    {CATEGORIES.filter((c) => c.name !== "All").map((c) => {
+                      const meta = CATEGORY_META[c.name] || CATEGORY_META.Other;
+                      const IconComp = meta.icon;
+                      const isSel = category === c.name;
+                      return (
+                        <div
+                          key={c.name}
+                          onClick={() => {
+                            setCategory(c.name);
+                            setIsCategoryOpen(false);
+                          }}
+                          className={`flex items-center gap-2 px-3 py-1.5 text-xs cursor-pointer whitespace-nowrap transition-colors ${
+                            isSel
+                              ? "bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 font-bold"
+                              : "text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-[#121c15]"
+                          }`}
+                        >
+                          <IconComp className={`h-3.5 w-3.5 flex-shrink-0 ${meta.color}`} />
+                          <span>{c.name}</span>
+                        </div>
+                      );
+                    })}
                   </div>
                 )}
               </div>
@@ -398,36 +497,85 @@ export const CleanHero: React.FC<CleanHeroProps> = ({
 
       {/* Category Pills & Search Row right above listings */}
       <div className="mt-4 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2 max-w-4xl mx-auto">
-        <div className="flex items-center gap-1.5 overflow-x-auto pb-1.5 w-full sm:flex-1 scrollbar-none">
-          {CATEGORIES.map((cat) => {
-            const isActive = selectedCategory === cat.name;
-            return (
-              <button
-                key={cat.name}
-                suppressHydrationWarning
-                onClick={() => onSelectCategory(cat.name)}
-                className={`rounded-full px-3 py-1 text-xs font-semibold whitespace-nowrap transition-all flex-shrink-0 ${
-                  isActive
-                    ? "bg-emerald-500 text-zinc-950 shadow-sm"
-                    : "bg-white dark:bg-[#0c140f] text-zinc-600 dark:text-zinc-400 border border-zinc-200 dark:border-[#19271c] hover:border-zinc-300 dark:hover:text-zinc-200"
-                }`}
-              >
-                {cat.name}
-              </button>
-            );
-          })}
+        <div className="relative flex items-center min-w-0 flex-1 group/cats">
+          {/* Left Arrow button for desktop/click scroll */}
+          <button
+            type="button"
+            onClick={() => scrollCategories("left")}
+            aria-label="Scroll left"
+            className="hidden sm:flex items-center justify-center h-6 w-6 rounded-full bg-white/80 dark:bg-[#0c140f]/90 border border-zinc-200 dark:border-[#1e3023] text-zinc-500 hover:text-emerald-500 shadow-sm flex-shrink-0 mr-1 transition-opacity opacity-70 hover:opacity-100"
+          >
+            <ChevronLeft className="h-3.5 w-3.5" />
+          </button>
+
+          {/* Horizontally scrollable container with smooth scrolling */}
+          <div
+            ref={categoryContainerRef}
+            className="flex items-center gap-1.5 overflow-x-auto pb-1.5 w-full scroll-smooth scrollbar-none"
+          >
+            {CATEGORIES.map((cat) => {
+              const isActive = selectedCategory === cat.name;
+              const meta = CATEGORY_META[cat.name] || CATEGORY_META.Other;
+              const IconComp = meta.icon;
+
+              return (
+                <button
+                  key={cat.name}
+                  type="button"
+                  suppressHydrationWarning
+                  onClick={(e) => handleCategoryClick(cat.name, e)}
+                  className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold whitespace-nowrap transition-all flex-shrink-0 cursor-pointer active:scale-95 ${
+                    isActive
+                      ? "bg-emerald-500 text-zinc-950 shadow-sm font-bold"
+                      : "bg-white dark:bg-[#0c140f] text-zinc-600 dark:text-zinc-400 border border-zinc-200 dark:border-[#19271c] hover:border-zinc-300 dark:hover:border-[#2b4431] dark:hover:text-zinc-200"
+                  }`}
+                >
+                  <IconComp
+                    className={`h-3 w-3 flex-shrink-0 ${
+                      isActive ? "text-zinc-950" : meta.color
+                    }`}
+                  />
+                  <span>{cat.name}</span>
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Right Arrow button for desktop/click scroll */}
+          <button
+            type="button"
+            onClick={() => scrollCategories("right")}
+            aria-label="Scroll right"
+            className="hidden sm:flex items-center justify-center h-6 w-6 rounded-full bg-white/80 dark:bg-[#0c140f]/90 border border-zinc-200 dark:border-[#1e3023] text-zinc-500 hover:text-emerald-500 shadow-sm flex-shrink-0 ml-1 transition-opacity opacity-70 hover:opacity-100"
+          >
+            <ChevronRight className="h-3.5 w-3.5" />
+          </button>
         </div>
 
-        <div className="relative w-full sm:w-48 md:w-56 flex-shrink-0">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-zinc-400 dark:text-zinc-500" />
+        <div className="relative w-full sm:w-52 md:w-60 flex-shrink-0">
+          <Search className={`absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 transition-colors ${searchQuery.trim() ? "text-emerald-500" : "text-zinc-400 dark:text-zinc-500"}`} />
           <input
             type="text"
             suppressHydrationWarning
-            placeholder="Search domain..."
+            placeholder="Search domain or creator..."
             value={searchQuery}
             onChange={(e) => onSearchChange(e.target.value)}
-            className="w-full rounded-full border border-zinc-200 dark:border-[#19271c] bg-white dark:bg-[#0c140f] pl-8 pr-3 py-1.5 text-xs text-zinc-900 dark:text-white placeholder-zinc-400 dark:placeholder-zinc-500 focus:border-emerald-500 focus:outline-none"
+            className={`w-full rounded-full border bg-white dark:bg-[#0c140f] pl-8.5 pr-8 py-1.5 text-xs text-zinc-900 dark:text-white placeholder-zinc-400 dark:placeholder-zinc-500 focus:outline-none transition-all ${
+              searchQuery.trim()
+                ? "border-emerald-500 ring-2 ring-emerald-500/20 shadow-sm"
+                : "border-zinc-200 dark:border-[#19271c] focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500/30"
+            }`}
           />
+          {searchQuery.trim() && (
+            <button
+              type="button"
+              onClick={() => onSearchChange("")}
+              aria-label="Clear search"
+              className="absolute right-2.5 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200 p-0.5 rounded-full hover:bg-zinc-100 dark:hover:bg-[#1a2c1f]"
+            >
+              <X className="h-3 w-3" />
+            </button>
+          )}
         </div>
       </div>
     </section>
