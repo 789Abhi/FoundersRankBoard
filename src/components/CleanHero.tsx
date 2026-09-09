@@ -13,7 +13,9 @@ import {
   Sparkles,
   Plus,
   Minus,
-  Loader2
+  Loader2,
+  Rocket,
+  Crown
 } from "lucide-react";
 
 interface CleanHeroProps {
@@ -197,14 +199,43 @@ export const CleanHero: React.FC<CleanHeroProps> = ({
 
   return (
     <section className="pt-4 pb-4 sm:pt-6 sm:pb-4 max-w-4xl mx-auto px-4 text-center">
-      {/* Live Traffic & Social Proof Pill matching reference screenshot */}
+      {/* Premium Badge Pill */}
       <div className="flex flex-col items-center">
-        <h1 className="text-2xl sm:text-4xl font-black text-zinc-900 dark:text-white tracking-tight">
-          For Ambitious Founders, Startups & YouTube Creators{" "}
-          <span className="bg-gradient-to-r from-emerald-600 via-emerald-500 to-teal-500 dark:from-emerald-400 dark:to-teal-300 bg-clip-text text-transparent">
-            Outbid to claim Rank #1
+        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-emerald-500/25 bg-emerald-500/10 dark:bg-[#0c1a12] text-[11px] sm:text-xs font-semibold text-emerald-600 dark:text-emerald-400 mb-3 shadow-sm backdrop-blur-md">
+          <Sparkles className="w-3.5 h-3.5 text-emerald-500 animate-pulse" />
+          <span>The Pay-to-Rank Global Leaderboard</span>
+          <span className="inline-block w-1 h-1 rounded-full bg-emerald-500/50" />
+          <span className="text-zinc-500 dark:text-zinc-400 font-normal">Startups & Creators</span>
+        </div>
+
+        <h1 className="text-3xl sm:text-5xl font-extrabold text-zinc-900 dark:text-white tracking-tight leading-[1.15]">
+          Outbid to Claim{" "}
+          <span className="bg-gradient-to-r from-emerald-500 via-teal-400 to-emerald-400 bg-clip-text text-transparent">
+            Rank #1
           </span>
         </h1>
+
+        {/* Targeted Platform Highlights with Icons & Brand Colors */}
+        <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-2.5 mt-3.5">
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-amber-500/10 border border-amber-500/20 text-amber-600 dark:text-amber-400 text-xs font-semibold shadow-sm">
+            <Crown className="w-3.5 h-3.5 text-amber-500" />
+            Founders
+          </span>
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 text-xs font-semibold shadow-sm">
+            <Rocket className="w-3.5 h-3.5 text-emerald-500" />
+            Startups & SaaS
+          </span>
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-red-500/10 border border-red-500/20 text-red-600 dark:text-red-400 text-xs font-semibold shadow-sm">
+            <svg viewBox="0 0 24 24" fill="currentColor" className="w-3.5 h-3.5 text-red-500">
+              <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+            </svg>
+            YouTube Creators
+          </span>
+        </div>
+
+        <p className="mt-2.5 text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 max-w-xl mx-auto font-normal leading-relaxed">
+          Promote your website or channel, get real visitors, and claim permanent exposure at the top.
+        </p>
       </div>
 
       {/* High-Density Quick Bid Bar */}
@@ -213,19 +244,19 @@ export const CleanHero: React.FC<CleanHeroProps> = ({
           <div className="flex flex-col lg:flex-row items-stretch lg:items-center gap-2 sm:gap-2.5">
             {/* Domain URL Input with Favicon or HD Globe (Huge room for long URLs) */}
             <div className="relative flex-1 w-full min-w-0">
-              <div className="absolute left-3 top-1/2 -translate-y-1/2 flex items-center justify-center h-5 w-5">
+              <div className="absolute left-2.5 top-1/2 -translate-y-1/2 flex items-center justify-center h-7 w-7 pointer-events-none">
                 {isFetchingMeta ? (
-                  <Loader2 className="h-4 w-4 text-emerald-500 animate-spin" />
+                  <Loader2 className="h-5 w-5 text-emerald-500 animate-spin" />
                 ) : faviconSrc ? (
                   /* eslint-disable-next-line @next/next/no-img-element */
                   <img
                     src={faviconSrc}
                     alt="Favicon"
-                    className="h-4 w-4 rounded object-contain"
+                    className="h-6 w-6 rounded-md object-cover shadow-sm ring-1 ring-black/10 dark:ring-white/10"
                     onError={() => setFaviconSrc("")}
                   />
                 ) : (
-                  <HDGlobeIcon size={18} variant="emerald" />
+                  <HDGlobeIcon size={22} variant="emerald" />
                 )}
               </div>
 
@@ -235,7 +266,7 @@ export const CleanHero: React.FC<CleanHeroProps> = ({
                 placeholder={placeholders[placeholderIndex]}
                 value={domainInput}
                 onChange={(e) => setDomainInput(e.target.value)}
-                className="w-full rounded-xl border border-zinc-200 dark:border-[#223526] bg-zinc-50 dark:bg-[#070b08] pl-9 pr-3 py-2 sm:py-2.5 text-xs sm:text-sm text-zinc-900 dark:text-white placeholder-zinc-400 dark:placeholder-zinc-500 focus:border-emerald-500 focus:outline-none transition-all"
+                className="w-full rounded-xl border border-zinc-200 dark:border-[#223526] bg-zinc-50 dark:bg-[#070b08] pl-11 pr-3 py-2 sm:py-2.5 text-xs sm:text-sm text-zinc-900 dark:text-white placeholder-zinc-400 dark:placeholder-zinc-500 focus:border-emerald-500 focus:outline-none transition-all font-medium"
               />
             </div>
 
