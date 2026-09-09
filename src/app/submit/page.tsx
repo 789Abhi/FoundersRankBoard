@@ -26,14 +26,15 @@ function SubmitContent() {
 
   // Read URL parameters for pre-filling
   const urlDomain = searchParams.get("domain") || "";
-  const urlCategory = (searchParams.get("category") as CategoryType) || "Marketing & Advertising";
+  const rawInitialCategory = (searchParams.get("category") as CategoryType);
+  const initialCategory: CategoryType = rawInitialCategory || (urlDomain.includes("youtube.com") || urlDomain.startsWith("@") ? "Social Media & Creator Tools" : "Marketing & Advertising");
   const urlAmount = Number(searchParams.get("amount")) || 5;
   const targetId = searchParams.get("targetId") || undefined;
 
   const [domain, setDomain] = useState(urlDomain);
   const [name, setName] = useState("");
   const [tagline, setTagline] = useState("");
-  const [category, setCategory] = useState<CategoryType>(urlCategory);
+  const [category, setCategory] = useState<CategoryType>(initialCategory);
   const [amount, setAmount] = useState<number>(urlAmount);
   
   const [error, setError] = useState<string | null>(null);
@@ -145,11 +146,26 @@ function SubmitContent() {
         } catch {}
       }
 
+      const isYouTube = clean.startsWith("youtube.com");
+      const safeUrl = isYouTube ? `https://www.${clean.replace(/^www\./, "")}` : ensureProtocol(clean);
+
+      // Safe fallback name for YouTube channels or domains
+      let defaultName = activeTitle || name.trim();
+      if (!defaultName) {
+        if (isYouTube) {
+          const handlePart = clean.replace(/^youtube\.com\/?/, "");
+          defaultName = handlePart.startsWith("@") ? handlePart : `@${handlePart}`;
+        } else {
+          const brand = clean.split(".")[0];
+          defaultName = brand ? brand.charAt(0).toUpperCase() + brand.slice(1) : clean;
+        }
+      }
+
       const orderPayload = {
         domain: clean,
-        name: activeTitle || name.trim() || undefined,
-        url: ensureProtocol(domain),
-        tagline: activeDesc || tagline.trim() || undefined,
+        name: defaultName,
+        url: safeUrl,
+        tagline: activeDesc || tagline.trim() || (isYouTube ? "YouTube Channel on FoundersRankBoard" : `Discover ${clean} live on FoundersRankBoard.`),
         category,
         amountUSD: Number(amount),
         favicon: activeFavicon || undefined,
@@ -310,13 +326,8 @@ function SubmitContent() {
             <div className="relative">
               <select
                 value={category}
-                onChange={(e) => !urlDomain && setCategory(e.target.value as CategoryType)}
-                disabled={!!urlDomain}
-                className={`w-full rounded-xl border px-4 py-3.5 text-sm text-zinc-900 dark:text-white focus:outline-none transition-colors appearance-none
-                  ${urlDomain
-                    ? "border-zinc-200 dark:border-[#1b281f] bg-zinc-100 dark:bg-[#0a0f0c] cursor-not-allowed opacity-80"
-                    : "border-zinc-200 dark:border-[#1b281f] bg-zinc-50 dark:bg-[#0c120e] focus:border-emerald-500 cursor-pointer"
-                  }`}
+                onChange={(e) => setCategory(e.target.value as CategoryType)}
+                className="w-full rounded-xl border px-4 py-3.5 text-sm text-zinc-900 dark:text-white focus:outline-none transition-colors appearance-none border-zinc-200 dark:border-[#1b281f] bg-zinc-50 dark:bg-[#0c120e] focus:border-emerald-500 cursor-pointer"
               >
                 {CATEGORIES.filter((c) => c.name !== "All").map((cat) => (
                   <option key={cat.name} value={cat.name}>

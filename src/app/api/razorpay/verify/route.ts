@@ -36,15 +36,21 @@ export async function POST(req: Request) {
 
     const newTotal = (existing?.total_paid_usd || 0) + amountUSD;
 
+    // Format safe URL: if domain starts with youtube.com or has channel path, ensure valid https URL
+    const cleanDomainStr = (notes.domain || "").trim();
+    const finalUrl = cleanDomainStr.startsWith("http://") || cleanDomainStr.startsWith("https://")
+      ? cleanDomainStr
+      : `https://${cleanDomainStr}`;
+
     const { error: upsertError } = await supabase
       .from("listings")
       .upsert(
         {
-          domain: notes.domain,
-          name: notes.name || notes.domain,
-          url: `https://${notes.domain}`,
+          domain: cleanDomainStr,
+          name: notes.name || cleanDomainStr,
+          url: finalUrl,
           tagline: notes.tagline || "",
-          category: notes.category,
+          category: notes.category || "Social Media & Creator Tools",
           total_paid_usd: newTotal,
           favicon: notes.favicon || "",
           last_clicked_at: existing ? undefined : new Date().toISOString(),

@@ -160,6 +160,11 @@ export const CleanHero: React.FC<CleanHeroProps> = ({
     if (cleaned && cleaned.includes(".")) {
       setFaviconSrc(getFaviconUrl(cleaned));
 
+      // If user typed a YouTube link or handle, automatically suggest the Social Media & Creator Tools category
+      if (cleaned.startsWith("youtube.com")) {
+        setCategory("Social Media & Creator Tools");
+      }
+
       // Fetch real metadata from the website via our API route
       const timer = setTimeout(async () => {
         try {
@@ -267,14 +272,29 @@ export const CleanHero: React.FC<CleanHeroProps> = ({
         }
       }
 
+      const isYouTube = cleaned.startsWith("youtube.com");
       const fallbackBrand = cleaned.split(".")[0];
       const brandCapital = fallbackBrand.charAt(0).toUpperCase() + fallbackBrand.slice(1);
 
+      let resolvedName = activeTitle;
+      if (!resolvedName) {
+        if (isYouTube) {
+          const handlePart = cleaned.replace(/^youtube\.com\/?/, "");
+          resolvedName = handlePart.startsWith("@") ? handlePart : `@${handlePart}`;
+        } else {
+          resolvedName = `${brandCapital} · ${cleaned}`;
+        }
+      }
+
+      const targetCategory = category !== "All"
+        ? category
+        : (isYouTube ? "Social Media & Creator Tools" : "Marketing & Advertising");
+
       onQuickSubmit({
         domain: cleaned,
-        name: activeTitle || `${brandCapital} · ${cleaned}`,
-        tagline: activeDesc || `Discover ${cleaned} live on FoundersRankBoard.`,
-        category: category !== "All" ? category : "Marketing & Advertising",
+        name: resolvedName,
+        tagline: activeDesc || (isYouTube ? "YouTube Channel on FoundersRankBoard." : `Discover ${cleaned} live on FoundersRankBoard.`),
+        category: targetCategory,
         amountUSD: Math.max(5, amount),
         favicon: activeFavicon || undefined,
       });
@@ -501,6 +521,7 @@ export const CleanHero: React.FC<CleanHeroProps> = ({
           {/* Left Arrow button for desktop/click scroll */}
           <button
             type="button"
+            suppressHydrationWarning
             onClick={() => scrollCategories("left")}
             aria-label="Scroll left"
             className="hidden sm:flex items-center justify-center h-6 w-6 rounded-full bg-white/80 dark:bg-[#0c140f]/90 border border-zinc-200 dark:border-[#1e3023] text-zinc-500 hover:text-emerald-500 shadow-sm flex-shrink-0 mr-1 transition-opacity opacity-70 hover:opacity-100"
@@ -544,6 +565,7 @@ export const CleanHero: React.FC<CleanHeroProps> = ({
           {/* Right Arrow button for desktop/click scroll */}
           <button
             type="button"
+            suppressHydrationWarning
             onClick={() => scrollCategories("right")}
             aria-label="Scroll right"
             className="hidden sm:flex items-center justify-center h-6 w-6 rounded-full bg-white/80 dark:bg-[#0c140f]/90 border border-zinc-200 dark:border-[#1e3023] text-zinc-500 hover:text-emerald-500 shadow-sm flex-shrink-0 ml-1 transition-opacity opacity-70 hover:opacity-100"

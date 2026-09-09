@@ -94,6 +94,8 @@ export const BigBottomRevenue: React.FC<BigBottomRevenueProps> = ({
         {/* Action Button */}
         <div className="mt-7 flex justify-center">
           <button
+            type="button"
+            suppressHydrationWarning
             onClick={() => onOpenSubmit(outbidOneAmount)}
             className="inline-flex items-center gap-2 rounded-full bg-emerald-500 hover:bg-emerald-400 active:scale-95 px-6 py-2.5 text-xs sm:text-sm font-bold text-zinc-950 shadow-lg shadow-emerald-500/25 transition-all"
           >

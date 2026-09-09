@@ -25,11 +25,14 @@ export async function GET(request: Request) {
   };
 
   // Protocols to try in sequence
-  const candidateUrls = [
-    `https://${domain}`,
-    `https://www.${domain}`,
-    `http://${domain}`,
-  ];
+  // If YouTube channel, prioritize https://www.youtube.com directly
+  const candidateUrls = domain.includes("youtube.com")
+    ? [`https://www.${domain.replace(/^www\./, "")}`, `https://${domain}`]
+    : [
+        `https://${domain}`,
+        `https://www.${domain}`,
+        `http://${domain}`,
+      ];
 
   let html = "";
   let finalUrl = `https://${domain}`;

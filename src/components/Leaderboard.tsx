@@ -115,6 +115,8 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({
               No domains listed in &quot;{selectedCategory}&quot; yet. Be the first to claim #1 spot for $5!
             </p>
             <button
+              type="button"
+              suppressHydrationWarning
               onClick={() => onOpenSubmit(100, selectedCategory !== "All" ? selectedCategory : undefined)}
               className="mt-4 inline-flex items-center gap-1.5 rounded-full bg-emerald-500 px-4 py-2 text-xs font-bold text-zinc-950 hover:bg-emerald-400 transition active:scale-95 shadow-md shadow-emerald-500/20"
             >

@@ -35,18 +35,21 @@ export const DomainFavicon: React.FC<DomainFaviconProps> = ({
     !customFavicon.includes("icons.duckduckgo.com")
   );
 
+  const isYouTube = cleaned.startsWith("youtube.com");
+
   const resolveInitialSrc = () => {
     if (!cleaned || cleaned.length < 3) return "";
     if (isDirectCustom && customFavicon) return customFavicon;
+    if (isYouTube) return ""; // Wait for custom avatar or fallback
     return `https://${cleaned}/favicon.ico`;
   };
 
   const [currentSrc, setCurrentSrc] = useState<string>(resolveInitialSrc());
   const [tier, setTier] = useState<"custom" | "root_ico" | "none">(
-    !cleaned || cleaned.length < 3 ? "none" : isDirectCustom ? "custom" : "root_ico"
+    !cleaned || cleaned.length < 3 ? "none" : isDirectCustom ? "custom" : isYouTube ? "none" : "root_ico"
   );
   const [loadState, setLoadState] = useState<"loading" | "loaded" | "error">(
-    !cleaned || cleaned.length < 3 ? "error" : "loading"
+    !cleaned || cleaned.length < 3 ? "error" : isYouTube && !isDirectCustom ? "error" : "loading"
   );
 
   useEffect(() => {
@@ -64,11 +67,18 @@ export const DomainFavicon: React.FC<DomainFaviconProps> = ({
       return;
     }
 
+    if (isYouTube) {
+      setTier("none");
+      setCurrentSrc("");
+      setLoadState("error");
+      return;
+    }
+
     // Try direct root favicon from the target domain
     setTier("root_ico");
     setCurrentSrc(`https://${cleaned}/favicon.ico`);
     setLoadState("loading");
-  }, [cleaned, customFavicon, isDirectCustom]);
+  }, [cleaned, customFavicon, isDirectCustom, isYouTube]);
 
   const handleError = () => {
     // If Tier 1 (custom) failed, try root /favicon.ico directly from domain
