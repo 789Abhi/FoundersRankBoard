@@ -200,9 +200,9 @@ export const CleanHero: React.FC<CleanHeroProps> = ({
       {/* Live Traffic & Social Proof Pill matching reference screenshot */}
       <div className="flex flex-col items-center">
         <h1 className="text-2xl sm:text-4xl font-black text-zinc-900 dark:text-white tracking-tight">
-          The Leaderboard Where{" "}
+          For Ambitious Founders, Startups & YouTube Creators{" "}
           <span className="bg-gradient-to-r from-emerald-600 via-emerald-500 to-teal-500 dark:from-emerald-400 dark:to-teal-300 bg-clip-text text-transparent">
-            Highest Bid Ranks #1
+            Outbid to claim Rank #1
           </span>
         </h1>
       </div>
