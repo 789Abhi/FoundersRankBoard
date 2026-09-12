@@ -7,7 +7,10 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Frequently Asked Questions - FoundersRankBoard",
-  description: "Find answers to commonly asked questions about FoundersRankBoard.",
+  description: "Find answers to commonly asked questions about FoundersRankBoard ranking, backlinks, and exposure.",
+  alternates: {
+    canonical: "https://foundersrankboard.com/faq",
+  },
 };
 
 export default function FAQPage() {

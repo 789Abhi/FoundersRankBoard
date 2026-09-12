@@ -107,7 +107,52 @@ const jsonLd = {
       "name": "Founders Rank Board",
       "url": "https://foundersrankboard.com",
       "logo": "https://foundersrankboard.com/icon.svg",
-      "sameAs": []
+      "sameAs": [
+        "https://x.com/THEFRB",
+        "https://www.linkedin.com/company/foundersrankboard"
+      ]
+    },
+    {
+      "@type": "ItemList",
+      "@id": "https://foundersrankboard.com/#sitelinks",
+      "name": "Navigation",
+      "itemListElement": [
+        {
+          "@type": "SiteNavigationElement",
+          "position": 1,
+          "name": "About",
+          "description": "Learn about FoundersRankBoard: the premier pay-to-rank domain and creator leaderboard.",
+          "url": "https://foundersrankboard.com/about"
+        },
+        {
+          "@type": "SiteNavigationElement",
+          "position": 2,
+          "name": "Rules",
+          "description": "Official bidding rules, overtaking mechanics, and outbid system for FoundersRankBoard.",
+          "url": "https://foundersrankboard.com/rules"
+        },
+        {
+          "@type": "SiteNavigationElement",
+          "position": 3,
+          "name": "FAQ",
+          "description": "Frequently asked questions about ranking, backlinks, payments, and exposure.",
+          "url": "https://foundersrankboard.com/faq"
+        },
+        {
+          "@type": "SiteNavigationElement",
+          "position": 4,
+          "name": "Submit Domain",
+          "description": "List your startup, website, or YouTube channel to claim rank #1 and get live traffic.",
+          "url": "https://foundersrankboard.com/submit"
+        },
+        {
+          "@type": "SiteNavigationElement",
+          "position": 5,
+          "name": "Privacy Policy",
+          "description": "Privacy policy and terms of service for FoundersRankBoard.",
+          "url": "https://foundersrankboard.com/privacy"
+        }
+      ]
     }
   ]
 };

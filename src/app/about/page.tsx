@@ -7,7 +7,10 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "About Us - FoundersRankBoard",
-  description: "Learn about FoundersRankBoard: the frictionless pay-to-rank domain leaderboard in USD.",
+  description: "Learn about FoundersRankBoard: the premier pay-to-rank domain and creator leaderboard.",
+  alternates: {
+    canonical: "https://foundersrankboard.com/about",
+  },
 };
 
 export default function AboutPage() {

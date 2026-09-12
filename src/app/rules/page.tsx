@@ -8,6 +8,9 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Rules & How It Works - FoundersRankBoard",
   description: "Official rules, bidding mechanics, and outbid system for FoundersRankBoard.",
+  alternates: {
+    canonical: "https://foundersrankboard.com/rules",
+  },
 };
 
 export default function RulesPage() {

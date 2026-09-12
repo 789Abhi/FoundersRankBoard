@@ -8,6 +8,9 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Privacy Policy - FoundersRankBoard",
   description: "Privacy Policy for FoundersRankBoard: zero registration, no password collection, safe outbound links.",
+  alternates: {
+    canonical: "https://foundersrankboard.com/privacy",
+  },
 };
 
 export default function PrivacyPage() {
