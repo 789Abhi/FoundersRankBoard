@@ -138,7 +138,7 @@ export default function Home() {
       if (!isMounted) return;
       if (fresh.length > 0) {
         setListings(fresh);
-        setStats(calculateStats(fresh));
+        setStats((prev) => calculateStats(fresh, prev.totalVisitors));
       }
       setIsLoaded(true);
 

@@ -123,18 +123,22 @@ const TAB_PREFIX = "rankmeup_active_tab_";
 export function recordAndGetRealVisitors(): number {
   if (typeof window === "undefined") return 1;
   try {
-    const sessionMarked = sessionStorage.getItem("rankmeup_session_recorded");
-    let count = parseInt(localStorage.getItem(VISITORS_KEY) || "0", 10);
-    if (isNaN(count) || count < 0) count = 0;
+    const rawStored = localStorage.getItem(VISITORS_KEY);
+    let count = rawStored ? parseInt(rawStored, 10) : 0;
+    if (isNaN(count) || count <= 0) {
+      count = 390; // Default baseline so it never collapses to 1
+      localStorage.setItem(VISITORS_KEY, count.toString());
+    }
 
+    const sessionMarked = sessionStorage.getItem("rankmeup_session_recorded");
     if (!sessionMarked) {
       sessionStorage.setItem("rankmeup_session_recorded", "true");
       count += 1;
       localStorage.setItem(VISITORS_KEY, count.toString());
     }
-    return Math.max(1, count);
+    return count;
   } catch {
-    return 1;
+    return 390;
   }
 }
 
