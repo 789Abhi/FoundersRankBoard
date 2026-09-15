@@ -176,6 +176,18 @@ export default function RootLayout({
         <link rel="icon" href="/icon.svg?v=3" type="image/svg+xml" />
         <link rel="alternate icon" href="/favicon.ico?v=3" sizes="any" />
         <link rel="apple-touch-icon" href="/apple-icon.png?v=3" />
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-V7C102VPXH"
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-V7C102VPXH');
+          `}
+        </Script>
         <Script src="https://checkout.razorpay.com/v1/checkout.js" strategy="beforeInteractive" />
         <script
           type="application/ld+json"
