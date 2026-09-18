@@ -70,8 +70,43 @@ export const Footer: React.FC = () => {
           </div>
         </div>
 
+        {/* Featured Badges: Product Hunt & FrogDR */}
+        <div className="mt-8 pt-6 border-t border-zinc-100 dark:border-zinc-900/80 flex flex-wrap items-center justify-center gap-5">
+          {/* Product Hunt Badge */}
+          <a
+            href="https://www.producthunt.com/products/founders-rank-board?embed=true&utm_source=badge-featured&utm_medium=badge&utm_campaign=badge-founders-rank-board"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="transition-transform hover:scale-[1.02] inline-flex items-center"
+          >
+            <img
+              src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1245486&theme=light&t=1789741148684"
+              alt="Founders Rank Board - The pay-to-rank leaderboard for founders &amp; Youtube creators | Product Hunt"
+              width="220"
+              height="48"
+              className="h-[44px] w-auto object-contain rounded-lg"
+            />
+          </a>
+
+          {/* FrogDR Domain Rating Badge */}
+          <a
+            href="https://frogdr.com/foundersrankboard.com?utm_source=foundersrankboard.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="transition-transform hover:scale-[1.02] inline-flex items-center"
+          >
+            <img
+              src="https://frogdr.com/foundersrankboard.com/badge-white.svg"
+              alt="Monitor your Domain Rating with FrogDR"
+              width="220"
+              height="48"
+              className="h-[44px] w-auto object-contain rounded-lg"
+            />
+          </a>
+        </div>
+
         {/* Bottom Bar: Copyright & Secured by Razorpay */}
-        <div className="mt-8 pt-6 border-t border-zinc-100 dark:border-zinc-900/80 flex flex-col sm:flex-row items-center justify-between gap-3 text-[11px] text-zinc-400 dark:text-zinc-500">
+        <div className="mt-6 pt-5 border-t border-zinc-100 dark:border-zinc-900/80 flex flex-col sm:flex-row items-center justify-between gap-3 text-[11px] text-zinc-400 dark:text-zinc-500">
           <p>© {new Date().getFullYear()} FoundersRankBoard.com • All rights reserved.</p>
           <p className="flex items-center gap-1.5">
             <span className="inline-block h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
